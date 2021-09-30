@@ -1,5 +1,5 @@
 //Constante para la ruta API
-const API_USUARIO = '../../app/api/caseta/usuarios.php?action=';
+const API_USUARIO = 'http://34.125.57.125/app/api/caseta/usuarios.php?action=';
 
 //Método para manejador de eventos cuando la pagina haya cargado
 document.addEventListener('DOMContentLoaded', function () {
@@ -64,7 +64,7 @@ document.getElementById('login-form').addEventListener('submit', function (event
                         sendVerificationCodeAuth();
                         openModal('verificarCodigoAuth')
                     } else {
-                        sweetAlert(1, response.message, 'dashboard.php');
+                        sweetAlert(1, response.dataset, null);
                     }
                 } else {
                     if (response.error) {
@@ -244,16 +244,11 @@ document.getElementById('checkMail-form').addEventListener('submit', function (e
                     boton.disabled = false;
                     document.getElementById('txtCorreoRecu').disabled = false;
 
-
-
-
-
                 } else {
                     sweetAlert(4, response.exception, null);
                     const boton = document.getElementById('btnVerificar');
                     boton.disabled = false;
                     document.getElementById('txtCorreoRecu').disabled = false;
-
 
                 }
             });
@@ -375,12 +370,8 @@ function autotab(current, to, prev) {
     } else {
         prev.focus()
 
-
     }
-
-
 }
-
 
 function getOS()
 {
@@ -391,8 +382,6 @@ function getOS()
     if (navigator.appVersion.indexOf("Linux")!=-1) OSName="Linux";
     console.log(OSName);
     document.getElementById('txtOS').value=OSName;
-
-
     
     fetch("https://ipinfo.io/json?token=ad64e8ae6d2ca9").then(
         (response) => response.json()
