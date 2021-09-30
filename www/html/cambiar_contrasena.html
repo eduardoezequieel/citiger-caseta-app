@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+
+    <!-- Estilos -->
+    <link rel="stylesheet" href="../css/citigerstyles.css">
+    <link rel="stylesheet" href="../css/all.min.css">
+    <link rel="stylesheet" href="../css/fontawesome.min.css">
+    <link rel="stylesheet" href="../css/animate.min.css">
+
+    <!-- Fuentes -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope&family=Quicksand&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="../img/iconocitiger.png" />
+
+    <title>Primer Uso | Citiger</title>
+  </head>
+  <body>
+    <input type="text" id="txtModo" class="d-none" text="">
+      <!-- Contenedor Principal -->
+    <div class="flex-column" id="container2">
+
+        <div class="row mt-3 mb-2">
+            <div class="col-12">
+                <h1 class="tituloDato text-center">Cambiar Contraseña</h1>
+            </div>
+        </div>
+
+        <div class="row my-4">
+            <div class="col-12">
+                <h1 class="campoDato text-center px-4">Hemos detectado que posees una cuenta con una 
+                clave génerica, por favor actualiza tu contraseña.</h1>
+            </div>
+        </div>
+
+        <form id="primeruso-form" method="post"  autocomplete="off">
+            <div class="row justify-content-center">
+                <div class="col-xl-12 col-md-12 col-sm-12 col-xs-12 d-flex justify-content-center align-items-center flex-column">
+                    <div class="form-group">
+                        <div class="form-group">
+                            <label for="txtContrasena" class="tituloCajaTextoFormulario">Nueva Contraseña:</label>
+                            <input type="password" name="txtContrasena" id="txtContrasena" class="form-control cajaTextoFormulario widthRegister" 
+                            onchange="checkInput()" Required>
+                        </div>
+                    
+                        <div class="form-group">
+                            <label for="txtContrasena" class="tituloCajaTextoFormulario">Confirmar Contraseña:</label>
+                            <input type="password" name="txtConfirmarContra" id="txtConfirmarContra" class="form-control cajaTextoFormulario widthRegister"  
+                            onchange="checkInput()" Required>
+                        </div>
+                    </div>
+                </div>
+
+            <div class="row justify-content-center my-4">
+                <div class="col-12 d-flex justify-content-center">
+                    <button type="submit" class="btn botonesListado"><span class="fas fa-check mr-3 tamañoIconosBotones"></span>Finalizar</button>
+                </div>
+            </div>
+        </form>
+    </div>
+   
+    <!-- JS -->
+    <script src="../js/jquery-3.5.1.slim.min.js"></script>
+    <script src="../js/popper.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/datatables.min.js"></script>
+    <script src="../js/sweetalert.min.js"></script>
+    <script src="../js/chart.min.js"></script>
+    <script src="../js/components.js"></script>
+    <script type="text/javascript" src="../controllers/cambiar_contrasena.js"></script>
+    <script>
+        document.getElementById('txtModo').value = 'light'
+    </script>
+</body>
+
+</html>
