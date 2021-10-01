@@ -1,5 +1,5 @@
 //Constante para la ruta API
-const API_USUARIO = 'http://34.125.242.168/app/api/caseta/usuarios.php?action=';
+const API_USUARIO = 'http://34.125.57.125/app/api/caseta/usuarios.php?action=';
 
 //Método para manejador de eventos cuando la pagina haya cargado
 document.addEventListener('DOMContentLoaded', function () {
