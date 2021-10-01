@@ -1,12 +1,40 @@
+//Declarando variables de la url
+var api_usuarioIndex;
+var idIndex;
+var id_tmp;
+var aliasIndex;
+var fotoIndex;
+var tipoIndex;
+var modoIndex;
+var correoIndex;
+
 //Constante para la ruta API
 const API_USUARIO = 'http://34.125.57.125/app/api/caseta/usuarios.php?action=';
 
+
 //Método para manejador de eventos cuando la pagina haya cargado
 document.addEventListener('DOMContentLoaded', function () {
+    let params = new URLSearchParams(location.search)
+    // Se obtienen los datos localizados por medio de las variables.
+    idIndex = params.get('id');
+    aliasIndex = params.get('alias');
+    fotoIndex = params.get('foto');
+    tipoIndex = params.get('tipo');
+    modoIndex = params.get('modo');
+    correoIndex = params.get('correo');
+    if (idIndex > 0){
+        // Constante para establecer la ruta y parámetros de comunicación con la API.
+        api_usuarioIndex = `http://34.125.57.125/app/api/caseta/usuarios.php?id=${id}&action=`;
+        
+    } else {
+        // Constante para establecer la ruta y parámetros de comunicación con la API.
+        api_usuarioIndex  = `http://34.125.57.125/app/api/caseta/usuarios.php?action=`;
+        
+    }
     //Metodo para activar todos los usuarios que ya cumplieron las 24 horas
     checkBlockUsers();
     //Verificando si hay usuarios registrados 
-    fetch(API_USUARIO + 'readAll')
+    fetch(api_usuarioIndex + 'readAll')
         .then(request => {
             //Se verifica si la petición fue correcta
             if (request.ok) {
@@ -16,27 +44,26 @@ document.addEventListener('DOMContentLoaded', function () {
                         sweetAlert(3, response.exception, null);
                     } else {
                         //Verificando si hay una sesión iniciada
-                        fetch(API_USUARIO + 'validateSession')
+                        fetch(api_usuarioIndex + 'validateSession')
                             .then(request => {
                                 //Se verifica si la petición fue correcta
                                 if (request.ok) {
                                     request.json().then(response => {
                                         //Se verifica si la respuesta no es correcta para redireccionar al primer uso
                                         if (response.status) {
-                                            window.location.href = 'dashboard.php';
-                                        } else {
+                                            window.location.href = `html/dashboard.html?id=${id}&alias=${alias}&foto=${foto}&tipo=${tipo}&modo=${modo}`;
                                         }
                                     })
                                 } else {
-                                    console.log(request.status + ' ' + request.statusText);
+                                    sweetAlert(2, response.exception, null);
                                 }
-                            }).catch(error => console.log(error))
+                            }).catch(error => sweetAlert(2, error, null))
                     }
                 })
             } else {
-                console.log(request.status + ' ' + request.statusText);
+                sweetAlert(2, request.status + ' ' + request.statusText, null)
             }
-        }).catch(error => console.log(error));
+        }).catch(error => sweetAlert(2, error, null));
 
         getOS();
         
@@ -51,7 +78,7 @@ document.getElementById('login-form').addEventListener('submit', function (event
     event.preventDefault();
 
     //Verificando las credenciales del usuario
-    fetch(API_USUARIO + 'logIn', {
+    fetch(api_usuarioIndex + 'logIn', {
         method: 'post',
         body: new FormData(document.getElementById('login-form'))
     }).then(request => {
@@ -60,11 +87,20 @@ document.getElementById('login-form').addEventListener('submit', function (event
             request.json().then(response => {
                 //Verificando si la respuesta es satisfactoria de lo contrario se muestra la excepción
                 if (response.status) {
+                    // Se obtienen los datos de la api para enviar a la url
+                    idIndex = response.idusuario_caseta;
+                    aliasIndex = response.usuario_caseta
+                    fotoIndex = response.foto_caseta;
+                    tipoIndex = response.tipousuario_caseta;
+                    modoIndex = response.modo_caseta;
+                    correoIndex = response.correo_caseta;
                     if (response.auth) {
-                        sendVerificationCodeAuth();
+                        id_tmp = 0;
+                        id_tmp = response.idusuario_caseta_tmp;
+                        sendVerificationCodeAuth(response.correo_caseta,response.alias_caseta);
                         openModal('verificarCodigoAuth')
                     } else {
-                        sweetAlert(1, response.dataset, null);
+                        sweetAlert(1, response.message, `html/dashboard.html?id=${response.idusuario_caseta}&alias=${response.usuario_caseta}&foto=${response.foto_caseta}&tipo=${response.tipousuario_caseta}&modo=${response.modo_caseta}&correo=${response.correo_caseta}`);
                     }
                 } else {
                     if (response.error) {
@@ -76,30 +112,28 @@ document.getElementById('login-form').addEventListener('submit', function (event
                 }
             })
         } else {
-            console.log(request.status + ' ' + request.statusText);
+            sweetAlert(2, request.status + ' ' + request.statusText, null)
         }
-    }).catch(error => console.log(error));
+    }).catch( error => sweetAlert(2, error, null));
 });
 
 //Enviar código de verificación
-function sendVerificationCodeAuth(){
-    fetch(API_USUARIO + 'sendVerificationCode')
+function sendVerificationCodeAuth(correo,alias){
+    fetch(`http://34.125.57.125/app/api/caseta/usuarios.php?action=sendVerificationCode&correo${correo}&alias=${alias}`)
         .then(request => {
             //Se verifica si la petición fue correcta
             if (request.ok) {
                 request.json().then(response => {
-                    //Se verifica si la respuesta no es correcta para redireccionar al primer uso
-                    if (response.status) {
-                        console.log('Correo enviado.');
-                    } else {
+                    //Se verifica si la respuesta es correcta
+                    if (!response.status) {
                         //Verificando si hay una sesión iniciada
-                        console.log(response.exception);
-                    }
+                        sweetAlert(2, response.exception, null);
+                    } 
                 })
             } else {
-                console.log(request.status + ' ' + request.statusText);
+                sweetAlert(2, request.status + ' ' + request.statusText, null)
             }
-        }).catch(error => console.log(error));
+        }).catch(error => sweetAlert(2, error, null));
 }
 
 //Función para verificar el codigo
@@ -115,7 +149,7 @@ document.getElementById('checkCodeAuth-form').addEventListener('submit', functio
     console.log(document.getElementById('codigoAuth').value);
 
     event.preventDefault();
-    fetch(API_USUARIO + 'verifyCodeAuth', {
+    fetch(`http://34.125.57.125/app/api/caseta/usuarios.php?action=verifyCodeAuth&id_tmp${id_tmp}`, {
         method: 'post',
         body: new FormData(document.getElementById('checkCodeAuth-form'))
     }).then(function (request) {
@@ -126,22 +160,22 @@ document.getElementById('checkCodeAuth-form').addEventListener('submit', functio
                 if (response.status) {
                     // Mostramos mensaje de exito
                     closeModal('verificarCodigoAuth');
-                    sweetAlert(1, response.message, 'dashboard.php');
+                    sweetAlert(1, response.message, `html/dashboard.html?id=${id}&alias=${alias}&foto=${foto}&tipo=${tipo}&modo=${modo}`);
                 } else {
-                    sweetAlert(4, response.exception, null);
+                    sweetAlert(2, response.exception, null);
                 }
             });
         } else {
-            console.log(request.status + ' ' + request.statusText);
+            sweetAlert(2, request.status + ' ' + request.statusText, null)
         }
     }).catch(function (error) {
-        console.log(error);
+        sweetAlert(2, error, null);
     });
 });
 
 function checkBlockUsers() {
     //Verificando si hay usuarios bloqueados que ya cumplieron su penalización
-    fetch(API_USUARIO + 'checkBlockUsers').then(request => {
+    fetch(api_usuarioIndex + 'checkBlockUsers').then(request => {
         //Verificando si la petición fue correcta
         if (request.ok) {
             request.json().then(response => {
@@ -151,7 +185,7 @@ function checkBlockUsers() {
                         document.getElementById('txtId').value = row.idusuario;
                         document.getElementById('txtBitacora').value = row.idbitacora;
                         //Activando los usuarios que ya cumplieron con su penalización
-                        fetch(API_USUARIO + 'activateBlockUsers', {
+                        fetch(api_usuarioIndex + 'activateBlockUsers', {
                             method: 'post',
                             body: new FormData(document.getElementById('login-form'))
                         }).then(request => {
@@ -163,23 +197,23 @@ function checkBlockUsers() {
                                     }
                                 })
                             } else {
-                                console.log(request.status + ' ' + request.statusText);
+                                sweetAlert(2, request.status + ' ' + request.statusText, null)
                             }
-                        }).catch(error => console.log(error));
+                        }).catch(error => sweetAlert(2, error, null));
                     })
                 }
             })
         } else {
-            console.log(request.status + ' ' + request.statusText);
+            sweetAlert(2, request.status + ' ' + request.statusText, null)
         }
-    }).catch(error => console.log(error));
+    }).catch(error => sweetAlert(2, error, null));
 }
 
 //Actualizando contraseña por obligación después de 90 días
 document.getElementById('90password-form').addEventListener('submit', function (event) {
     event.preventDefault();
     //Verificando las credenciales del usuario
-    fetch(API_USUARIO + 'changePassword', {
+    fetch(`http://34.125.57.125/app/api/caseta/usuarios.php?action=changePassword&id_tmp${id_tmp}`, {
         method: 'post',
         body: new FormData(document.getElementById('90password-form'))
     }).then(request => {
@@ -188,15 +222,15 @@ document.getElementById('90password-form').addEventListener('submit', function (
             request.json().then(response => {
                 //Verificando si la respuesta es satisfactoria de lo contrario se muestra la excepción
                 if (response.status) {
-                    sweetAlert(1, response.message, 'dashboard.php');
+                    sweetAlert(1, response.message, `html/dashboard.html?id=${id}&alias=${alias}&foto=${foto}&tipo=${tipo}&modo=${modo}`);
                 } else {
                     sweetAlert(2, response.exception, null);
                 }
             })
         } else {
-            console.log(request.status + ' ' + request.statusText);
+            sweetAlert(2, request.status + ' ' + request.statusText, null)
         }
-    }).catch(error => console.log(error));
+    }).catch(error => sweetAlert(2, error, null));
 })
 
 //Función para mostrar o ocultar contraseñas
@@ -226,7 +260,7 @@ document.getElementById('checkMail-form').addEventListener('submit', function (e
     boton.disabled = true;
 
     event.preventDefault();
-    fetch(API_USUARIO + 'sendMail', {
+    fetch(api_usuarioIndex + 'sendMail', {
         method: 'post',
         body: new FormData(document.getElementById('checkMail-form'))
     }).then(function (request) {
@@ -237,7 +271,8 @@ document.getElementById('checkMail-form').addEventListener('submit', function (e
 
                 // Se comprueba si la respuesta es satisfactoria, de lo contrario se muestra un mensaje con la excepción.
                 if (response.status) {
-
+                    id_tmp = 0;
+                    id_tmp = response.dataset.idusuario;
                     closeModal('recuperarContraseña');
                     openModal('verificarCodigoRecuperacion');
                     const boton = document.getElementById('btnVerificar');
@@ -253,10 +288,10 @@ document.getElementById('checkMail-form').addEventListener('submit', function (e
                 }
             });
         } else {
-            console.log(request.status + ' ' + request.statusText);
+            sweetAlert(2, request.status + ' ' + request.statusText, null)
         }
     }).catch(function (error) {
-        console.log(error);
+        sweetAlert(2, error, null)
     });
 });
 
@@ -273,7 +308,7 @@ document.getElementById('checkCode-form').addEventListener('submit', function (e
     document.getElementById('codigo').value = uno + dos + tres + cuatro + cinco + seis;
 
     event.preventDefault();
-    fetch(API_USUARIO + 'verifyCode', {
+    fetch(`http://34.125.57.125/app/api/caseta/usuarios.php?action=verifyCode&id_tmp${id_tmp}`, {
         method: 'post',
         body: new FormData(document.getElementById('checkCode-form'))
     }).then(function (request) {
@@ -294,10 +329,10 @@ document.getElementById('checkCode-form').addEventListener('submit', function (e
                 }
             });
         } else {
-            console.log(request.status + ' ' + request.statusText);
+            sweetAlert(2, request.status + ' ' + request.statusText, null)
         }
     }).catch(function (error) {
-        console.log(error);
+        sweetAlert(2, error, null)
     });
 });
 
@@ -331,7 +366,7 @@ document.getElementById('update-form').addEventListener('submit', function (even
                 sweetAlert(3, 'Las claves ingresadas deben ser iguales', null);
             } else {
                 // Realizamos peticion a la API de clientes con el caso changePass y method post para dar acceso al valor de los campos del form
-                fetch(API_USUARIO + 'changePass', {
+                fetch(`http://34.125.57.125/app/api/caseta/usuarios.php?action=changePass&id_tmp${id_tmp}`, {
                     method: 'post',
                     body: new FormData(document.getElementById('update-form'))
                 }).then(function (request) {
@@ -350,10 +385,10 @@ document.getElementById('update-form').addEventListener('submit', function (even
                             }
                         });
                     } else {
-                        console.log(request.status + ' ' + request.statusText);
+                        sweetAlert(2, request.status + ' ' + request.statusText, null)
                     }
                 }).catch(function (error) {
-                    console.log(error);
+                    sweetAlert(2, error, null)
                 });
 
             }

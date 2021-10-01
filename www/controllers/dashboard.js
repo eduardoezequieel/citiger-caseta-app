@@ -2,8 +2,29 @@
 const API_VISITA = '../../app/api/caseta/visitas.php?action=';
 const API_USUARIOS = '../../app/api/caseta/usuarios.php?action=';
 
+//Declarando variables de la url
+var api_usuarioDash;
+var idDash;
+var aliasDash;
+var fotoDash;
+var tipoDash;
+var modoDash;
+var correoDash;
 
 document.addEventListener('DOMContentLoaded', function () {
+    let params = new URLSearchParams(location.search)
+    // Se obtienen los datos localizados por medio de las variables.
+    idDash = params.get('id');
+    aliasDash = params.get('alias');
+    fotoDash = params.get('foto');
+    tipoDash = params.get('tipo');
+    modoDash = params.get('modo');
+    correoDash = params.get('correo');
+    //Imprimiendo el navbar
+    isLogged(idDash,aliasDash,fotoDash,tipoDash,modoDash);
+    //Poniendo mensaje de bienvenida al usuario
+    document.getElementById('bienvenida').textContent = `¡Bienvenido ${aliasDash}!`;
+    //Cargando información de la pagina
     contadorVisitas();
     createSesionHistory();
     checkIfEmailIsValidated();
