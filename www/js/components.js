@@ -119,7 +119,7 @@ function isLogged(id,alias,foto,tipo,modo) {
                                         class="fas fa-moon mr-3 tamañoIconos"></i>Nocturno</a>
                             </li>
                             <li class="nav-item">
-                                <a href="#" onclick="logOut3()" class="nav-link ">
+                                <a href="#" onclick="logOut3(${id})" class="nav-link ">
                                     <i class="fas fa-sign-out-alt mr-3 tamañoIconos"></i>
                                     Cerrar Sesión
                                 </a>
@@ -176,7 +176,7 @@ function isLogged(id,alias,foto,tipo,modo) {
                                                 class="fas fa-moon mr-3 tamañoIconos"></i>Nocturno</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="#" onclick="logOut3()" class="nav-link ">
+                                        <a href="#" onclick="logOut3(${id})" class="nav-link ">
                                             <i class="fas fa-sign-out-alt mr-3 tamañoIconos"></i>
                                             Cerrar Sesión
                                         </a>
@@ -1282,7 +1282,7 @@ function logOut2() {
 }
 
 // Función para mostrar un mensaje de confirmación al momento de cerrar sesión del residente.
-function logOut3() {
+function logOut3(idLogOut) {
     swal({
         title: 'Advertencia',
         text: '¿Quiere cerrar la sesión?',
@@ -1293,7 +1293,7 @@ function logOut3() {
     }).then(function (value) {
         // Se verifica si fue cliqueado el botón Sí para hacer la petición de cerrar sesión, de lo contrario se muestra un mensaje.
         if (value) {
-            fetch('../../app/api/caseta/usuarios.php?action=logOut', {
+            fetch(`http://34.125.57.125/app/api/caseta/usuarios.php?action=logOut&id=${idLogOut}`, {
                 method: 'get'
             }).then(function (request) {
                 // Se verifica si la petición es correcta, de lo contrario se muestra un mensaje indicando el problema.
@@ -1301,7 +1301,7 @@ function logOut3() {
                     request.json().then(function (response) {
                         // Se comprueba si la respuesta es satisfactoria, de lo contrario se muestra un mensaje con la excepción.
                         if (response.status) {
-                            sweetAlert(1, response.message, 'index.php');
+                            sweetAlert(1, response.message, '../index.html');
                         } else {
                             sweetAlert(2, response.exception, null);
                         }
