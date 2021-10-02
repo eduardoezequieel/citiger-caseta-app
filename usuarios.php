@@ -31,12 +31,12 @@ if (isset($_GET['action'])) {
                     'message' => null, 
                     'exception' => null);
     //Verificando si hay una sesion iniciada
-    if (isset($_SESSION['idusuario_caseta'])) {
+    if (isset($_GET['id'])) {
         //Se compara la acción a realizar cuando la sesion está iniciada
         switch ($_GET['action']) {
             //Caso para verificar si el residente posee su correo electronico verificado.
             case 'checkIfEmailIsValidated':
-                if ($usuarios->setId($_SESSION['idusuario_caseta'])) {
+                if ($usuarios->setId($_GET['id'])) {
                     if ($result['dataset'] = $usuarios->checkIfEmailIsValidated()) {
                         $result['status'] = 1;
                     } else {
@@ -49,13 +49,12 @@ if (isset($_GET['action'])) {
                 } else {
                     $result['exception'] = 'Id invalido.';
                 }
-
                 break;
             //Enviar código de verificación para verificar correo electronico
             case 'sendEmailCode':
                 // Generamos el codigo de seguridad 
                 $code = rand(999999, 111111);
-                if ($correo->setCorreo($_SESSION['correo_caseta'])) {
+                if ($correo->setCorreo($_GET['correo'])) {
                     // Ejecutamos funcion para obtener el usuario del correo ingresado\
                     $correo->obtenerUsuario($_SESSION['correo_caseta']);
                     try {
@@ -92,11 +91,12 @@ if (isset($_GET['action'])) {
                 } else {
                     $result['exception'] = 'Correo incorrecto.';
                 }
-
                 break;
 
             //Caso para verificar el código y poder verificar el correo electronico.
             case 'verifyCodeEmail':
+                //Seteando la variable de sesión a utilizar
+                $_SESSION['idusuario_caseta'] = $_GET['id'];
                 $_POST = $usuarios->validateForm($_POST);
                 // Validmos el formato del mensaje que se enviara en el correo
                 if ($correo->setCodigo($_POST['codigoAuth'])) {
@@ -114,10 +114,12 @@ if (isset($_GET['action'])) {
                 } else {
                     $result['exception'] = 'Mensaje incorrecto';
                 }
+                //Destruyendo las variables de usuario
+                session_destroy();
                 break;
             //Caso para cargar los historiales de sesión fallidos de un usuario
             case 'readFailedSessions':
-                if ($usuarios->setId($_SESSION['idusuario_caseta'])) {
+                if ($usuarios->setId($_GET['id'])) {
                     if ($result['dataset'] = $usuarios->readFailedSessions()) {
                         $result['status'] = 1;
                     } else {
@@ -130,11 +132,10 @@ if (isset($_GET['action'])) {
                 } else {
                     $result['exception'] = 'Id invalido.';
                 }
-                
                 break;
             //Obtener el modo de autenticación de un usuario
             case 'getAuthMode':
-                if ($usuarios->setId($_SESSION['idusuario_caseta'])) {
+                if ($usuarios->setId($_GET['id'])) {
                     if ($result['dataset'] = $usuarios->getAuthMode()) {
                         $result['status'] = 1;
                     } else {
@@ -147,11 +148,10 @@ if (isset($_GET['action'])) {
                 } else {
                     $result['exception'] = 'Id incorrecto.';
                 }
-                
                 break;
             //Caso para actualizar la preferencia del modo de autenticacion del usuario
             case 'updateAuthMode':
-                if ($usuarios->setId($_SESSION['idusuario_caseta'])) {
+                if ($usuarios->setId($_GET['id'])) {
                     if ($usuarios->checkPassword($_POST['txtContrasenaActualAuth'])) {
                         if ($_POST['switchValue'] == 'Si' || $_POST['switchValue'] == 'No') {
                             if ($validado = $usuarios->checkIfEmailIsValidated()) {
@@ -181,18 +181,17 @@ if (isset($_GET['action'])) {
                 } else {
                     $result['exception'] = 'Sesión invalida.';
                 }
-                
                 break;
             //Caso para actualizar el correo electronico actual
             case 'actualizarCorreo':
                 $_POST = $usuarios->validateForm($_POST);
                 if ($_POST['txtNuevoCorreo'] == $_POST['txtConfirmarCorreo']) {
                     if ($usuarios->setCorreo($_POST['txtNuevoCorreo'])) {
-                        if ($usuarios->setId($_SESSION['idusuario_caseta'])) {
+                        if ($usuarios->setId($_GET['id'])) {
                             if ($usuarios->checkPassword($_POST['txtPassword'])) {
                                 if ($usuarios->changeEmail()) {
                                     if ($usuarios->emailNotValidated()) {
-                                        $_SESSION['correo_caseta'] = $usuarios->getCorreo();
+                                        $result['correo_caseta'] = $usuarios->getCorreo();
                                         $result['status'] = 1;
                                         $result['message'] = 'Correo actualizado correctamente. Por favor asegurate de verificarlo.';
                                     } else {
@@ -213,12 +212,11 @@ if (isset($_GET['action'])) {
                 } else {
                     $result['exception'] = 'Los correos electrónicos no coinciden.';
                 }
-                
                 break;
 
             //Caso para actualizar el nombre de usuario
             case 'updateUser':
-                if ($usuarios->setId($_SESSION['idusuario_caseta'])) {
+                if ($usuarios->setId($_GET['id'])) {
                     if ($usuarios->checkPassword($_POST['txtPassword2'])) {
                         if ($usuarios->setUsername($_POST['txtNuevoUsuario'])) {
                             if ($_POST['txtNuevoUsuario'] == $_POST['txtConfirmarUsuario']) {
@@ -253,7 +251,6 @@ if (isset($_GET['action'])) {
                 } else {
                     $result['exception'] = 'Id incorrecto.';
                 }
-                
                 break;
             //Caso para leer todos los datos de la tabla
             case 'readAll':
@@ -270,21 +267,20 @@ if (isset($_GET['action'])) {
                 break;
             //Caso para cerrar la sesión
             case 'logOut':
-                unset($_SESSION['idusuario_caseta']);
+                unset($_GET['id']);
                 $result['status'] = 1;
                 $result['message'] = 'Sesión eliminada correctamente';
                 break;
             //Redirige al dashboard
             case 'validateSession':
                 $result['status'] = 1;
-                $result['message'] = 'Posee una sesión activa.';
                 break;
             case 'setLightMode':
-                if ($usuarios->setId($_SESSION['idusuario_caseta'])) {
+                if ($usuarios->setId($_GET['id'])) {
                     if ($usuarios->setLightMode()) {
                         $result['status'] = 1;
                         $result['message'] = 'Modo claro activado correctamente.';
-                        $_SESSION['modo_caseta'] = 'light';
+                        $result['modo_caseta'] = 'light';
                     } else {
                         $result['exception'] = 'Ocurrio un problema-';
                     }
@@ -294,11 +290,11 @@ if (isset($_GET['action'])) {
                 
                 break;
             case 'setDarkMode':
-                if ($usuarios->setId($_SESSION['idusuario_caseta'])) {
+                if ($usuarios->setId($_GET['id'])) {
                     if ($usuarios->setDarkMode()) {
                         $result['status'] = 1;
                         $result['message'] = 'Modo oscuro activado correctamente.';
-                        $_SESSION['modo_caseta'] = 'dark';
+                        $result['modo_caseta'] = 'dark';
                     } else {
                         $result['exception'] = 'Ocurrio un problema-';
                     }
@@ -307,7 +303,7 @@ if (isset($_GET['action'])) {
                 }
                 break;
             case 'readProfile2':
-                if ($usuarios->setId($_SESSION['idusuario_caseta'])) {
+                if ($usuarios->setId($_GET['id'])) {
                     if ($result['dataset'] = $usuarios->readProfile2()) {
                         $result['status'] = 1;
                     } else {
@@ -332,7 +328,7 @@ if (isset($_GET['action'])) {
                                     if ($usuarios->setApellidos($_POST['txtApellidos'])) {
                                         if (isset($_POST['cbGenero'])) {
                                             if ($usuarios->setGenero($_POST['cbGenero'])) {
-                                                if ($usuarios->setId($_SESSION['idusuario_caseta'])) {
+                                                if ($usuarios->setId($_GET['id'])) {
                                                     if ($usuarios->updateInfo()) {
                                                         $result['status'] = 1;
                                                         $result['message'] = 'Perfil modificado correctamente';
@@ -369,12 +365,12 @@ if (isset($_GET['action'])) {
                 break;
             case 'updateFoto':
                 $_POST = $usuarios->validateForm($_POST);
-                if ($usuarios->setId($_SESSION['idusuario_caseta'])) {
+                if ($usuarios->setId($_GET['id'])) {
                     if ($usuarios->setFoto($_FILES['archivo_usuario'])) {
                         if ($data = $usuarios->readProfile2()) {
                             if ($usuarios->updateFoto2($data['foto'])) {
                                 $result['status'] = 1;
-                                $_SESSION['foto'] = $usuarios->getFoto();
+                                $result['foto'] = $usuarios->getFoto();
                                 if ($usuarios->saveFile($_FILES['archivo_usuario'], $usuarios->getRuta(), $usuarios->getFoto())) {
                                     $result['message'] = 'Foto modificada correctamente';
                                 } else {
@@ -397,7 +393,7 @@ if (isset($_GET['action'])) {
             //Caso para actualizar la contraseña (Dentro del sistema)
             case 'updatePassword':
                 $_POST = $usuarios->validateForm($_POST);
-                if ($usuarios->setId($_SESSION['idusuario_caseta'])) {
+                if ($usuarios->setId($_GET['id'])) {
                     if ($usuarios->checkPassword($_POST['txtContrasenaActual'])) {
                         if ($_POST['txtNuevaContrasena'] == $_POST['txtConfirmarContrasena']) {
                             if ($_POST['txtNuevaContrasena'] != $_POST['txtContrasenaActual'] ||
@@ -464,6 +460,9 @@ if (isset($_GET['action'])) {
                 }
                 break;
                 case 'createSesionHistory':
+                    //Seteando la variable de sesión a utilizar
+                    $_SESSION['idusuario_caseta'] = $_GET['id'];
+                    $_SESSION['ipusuario_caseta'] = $_GET['ip'];
                     if ($usuarios->checkDevices2()) {
                         $result['status'] = 1;
                         $result['message'] = 'Sesión ya registrada en la base de datos.';
@@ -475,8 +474,12 @@ if (isset($_GET['action'])) {
                             $result['exception'] = Database::getException();
                         }
                     }
+                    //Destruyendo variables de sesión
+                    session_destroy();
                     break;
                     case 'readDevices':
+                        //Seteando la variable de sesión a utilizar
+                        $_SESSION['idusuario_caseta'] = $_GET['id'];
                         // Ejecutamos la funcion del modelo
                         if ($result['dataset'] = $usuarios->getSesionHistory2()) {
                             $result['status'] = 1;
@@ -488,6 +491,8 @@ if (isset($_GET['action'])) {
                                 $result['exception'] = 'No hay dispositivos registrados';
                             }
                         }
+                        //Destruyendo variables de sesión
+                        session_destroy();
                         break;
                 //Caso de default del switch
             default:
@@ -517,21 +522,22 @@ if (isset($_GET['action'])) {
                         if ($usuarios->checkEstado()) {
                             if ($usuarios->checkPassword($_POST['txtContrasenia'])) {  
                                 $_SESSION['idusuario_caseta'] = $usuarios->getId();
-                                $_SESSION['usuario_caseta'] = $usuarios->getUsername();
-                                $_SESSION['foto_caseta'] = $usuarios->getFoto();
-                                $_SESSION['tipousuario_caseta'] = $usuarios->getIdTipoUsuario();
-                                $_SESSION['modo_caseta'] = $usuarios->getModo();
-                                $_SESSION['correo_caseta'] = $usuarios->getCorreo();
-                                $_SESSION['ipusuario_caseta'] = $_POST['txtIP'];
-                                $_SESSION['regionusuario_caseta'] = $_POST['txtLoc'];
-                                $_SESSION['sistemausuario_caseta'] = $_POST['txtOS'];
+                                $result['idusuario_caseta'] = $usuarios->getId();
+                                $result['usuario_caseta'] = $usuarios->getUsername();
+                                $result['foto_caseta'] = $usuarios->getFoto();
+                                $result['tipousuario_caseta'] = $usuarios->getIdTipoUsuario();
+                                $result['modo_caseta'] = $usuarios->getModo();
+                                $result['correo_caseta'] = $usuarios->getCorreo();
+                                $result['ipusuario_caseta'] = $_POST['txtIP'];
+                                $result['regionusuario_caseta'] = $_POST['txtLoc'];
+                                $result['sistemausuario_caseta'] = $_POST['txtOS'];
                                 //Se reinicia el conteo de intentos fallidos
                                 if ($usuarios->increaseIntentos(0)){
                                     if ($result['dataset'] = $usuarios->checkLastPasswordUpdate()) {
                                         $result['error'] = 1;
                                         $result['message'] = 'Se ha detectado que debes actualizar
                                                                 tu contraseña por seguridad.';
-                                        $_SESSION['idusuario_caseta_tmp'] = $_SESSION['idusuario_caseta'];
+                                        $result['idusuario_caseta_tmp'] = $_SESSION['idusuario_caseta'];
                                         unset($_SESSION['idusuario_caseta']);
                                     } else {
                                         if ($autenticacion = $usuarios->getAuthMode()) {
@@ -597,10 +603,14 @@ if (isset($_GET['action'])) {
                 } else {
                     $result['exception'] = 'El correo ingresado es incorrecto.';
                 }
+                session_destroy();
                 
                 break;
             //Enviar código de verificación
             case 'sendVerificationCode':
+                //Seteando la variable de sesión a utilizar
+                $_SESSION['correo_caseta'] = $_GET['correo'];
+                $_SESSION['usuario'] = $_GET['alias'];
                 // Generamos el codigo de seguridad 
                 $code = rand(999999, 111111);
                 if ($correo->setCorreo($_SESSION['correo_caseta'])) {
@@ -640,10 +650,12 @@ if (isset($_GET['action'])) {
                 } else {
                     $result['exception'] = 'Correo incorrecto.';
                 }
-
+                session_destroy();
                 break;
             //Caso para verificar el código con el factor de autenticación en dos pasos.
             case 'verifyCodeAuth':
+                //Seteando la variable de sesión a utilizar
+                $_SESSION['idcaseta_temp'] = $_GET['id_tmp'];
                 $_POST = $usuarios->validateForm($_POST);
                 // Validmos el formato del mensaje que se enviara en el correo
                 if ($correo->setCodigo($_POST['codigoAuth'])) {
@@ -662,6 +674,8 @@ if (isset($_GET['action'])) {
                 } else {
                     $result['exception'] = 'Mensaje incorrecto';
                 }
+                //Destruyendo las variables de sesión;
+                session_destroy();
                 break;
             //Caso para verificar si hay usuarios que desbloquear
             case 'checkBlockUsers':
@@ -686,6 +700,8 @@ if (isset($_GET['action'])) {
                 break;
             //Caso para cambiar la contraseña obligatorio
             case 'changePassword':
+                //Seteando la variable de sesión a utilizar
+                $_SESSION['idcaseta_temp'] = $_GET['id_tmp'];
                 $_POST = $usuarios->validateForm($_POST);
                 if ($usuarios->setId($_SESSION['idusuario_caseta_tmp'])) {
                     if ($usuarios->checkPassword($_POST['txtContrasenaActual1'])) {
@@ -721,6 +737,8 @@ if (isset($_GET['action'])) {
                 } else {
                     $result['exception'] = 'Id incorrecto.';
                 }
+                //Destruyendo las variables de sesión;
+                session_destroy();
                 break;
                 case 'sendMail':
 
@@ -731,9 +749,9 @@ if (isset($_GET['action'])) {
                         if ($correo->validarCorreo('usuario')) {
     
                             // Ejecutamos funcion para obtener el usuario del correo ingresado\
-                            $_SESSION['mail'] = $correo->getCorreo();
+                            $result['mail'] = $correo->getCorreo();
     
-                            $correo->obtenerUsuario($_SESSION['mail']);
+                            $result['dataset'] = $correo->obtenerUsuario($result['mail']);
     
     
                             try {
@@ -775,12 +793,13 @@ if (isset($_GET['action'])) {
     
                         $result['exception'] = 'Correo incorrecto';
                     }
-    
-    
-    
+                    //Destruyendo las variables de sesión;
+                    session_destroy();
                     break;
     
                 case 'verifyCode':
+                    //Seteando la variable de sesión a utilizar
+                    $_SESSION['idusuario'] = $_GET['id_tmp'];
                     $_POST = $usuarios->validateForm($_POST);
                     // Validmos el formato del mensaje que se enviara en el correo
                     if ($correo->setCodigo($_POST['codigo'])) {
@@ -796,9 +815,13 @@ if (isset($_GET['action'])) {
                     } else {
                         $result['exception'] = 'Mensaje incorrecto';
                     }
+                    //Destruyendo las variables de sesión;
+                    session_destroy();
                     break;
 
                     case 'changePass':
+                        //Seteando la variable de sesión a utilizar
+                        $_SESSION['idusuario'] = $_GET['id_tmp'];
                         // Obtenemos el form con los inputs para obtener los datos
                         $_POST = $usuarios->validateForm($_POST);
                         if ($usuarios->setId($_SESSION['idusuario'])) {
@@ -820,7 +843,13 @@ if (isset($_GET['action'])) {
                         } else {
                             $result['exception'] = 'Correo incorrecto';
                         }
+                         //Destruyendo las variables de sesión;
+                        session_destroy();
                         break;
+            //Redirige al dashboard
+            case 'validateSession':
+                $result['error'] = 1;
+                break;
             default:
                 $result['exception'] = 'La acción no está disponible afuera de la sesión';
         }

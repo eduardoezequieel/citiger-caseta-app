@@ -1,16 +1,13 @@
-//Constante para la ruta API
-const API_VISITA = '../../app/api/caseta/visitas.php?action=';
-const API_USUARIOS = '../../app/api/caseta/usuarios.php?action=';
-
 //Declarando variables de la url
 var api_usuarioDash;
+var api_visitaDash;
 var idDash;
 var aliasDash;
 var fotoDash;
 var tipoDash;
 var modoDash;
 var correoDash;
-
+var ip;
 document.addEventListener('DOMContentLoaded', function () {
     let params = new URLSearchParams(location.search)
     // Se obtienen los datos localizados por medio de las variables.
@@ -20,10 +17,20 @@ document.addEventListener('DOMContentLoaded', function () {
     tipoDash = params.get('tipo');
     modoDash = params.get('modo');
     correoDash = params.get('correo');
+    ip = params.get('ip');
+    document.getElementById('txtModo').value = modoDash;
     //Imprimiendo el navbar
     isLogged(idDash,aliasDash,fotoDash,tipoDash,modoDash);
     //Poniendo mensaje de bienvenida al usuario
     document.getElementById('bienvenida').textContent = `¡Bienvenido ${aliasDash}!`;
+    //Verificando si hay algún id
+    if (idDash > 0) {
+        api_visitaDash = `http://34.125.57.125/app/api/caseta/visitas.php?id=${idDash}&action=`;
+        api_usuarioDash = `http://34.125.57.125/app/api/caseta/usuarios.php?id=${idDash}&action=`;
+    } else {
+        api_visitaDash = 'http://34.125.57.125/app/api/caseta/visitas.php?action=';
+        api_usuarioDash = 'http://34.125.57.125/app/api/caseta/usuarios.php?action=';
+    }
     //Cargando información de la pagina
     contadorVisitas();
     createSesionHistory();
@@ -32,7 +39,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 //Se verifica si el usuario ha validado su correo.
 function checkIfEmailIsValidated() {
-    fetch(API_USUARIOS + 'checkIfEmailIsValidated', {
+    fetch(api_usuarioDash + 'checkIfEmailIsValidated', {
         method: 'get'
     }).then(function (request) {
         // Se verifica si la petición es correcta, de lo contrario se muestra un mensaje indicando el problema.
@@ -62,7 +69,7 @@ function checkIfEmailIsValidated() {
 
 //Funcion para enviar un correo electronico con el codigo de verificacion
 function sendEmailCode(){
-    fetch(API_USUARIOS + 'sendEmailCode', {
+    fetch(`http://34.125.57.125/app/api/caseta/usuarios.php?id=${idDash}&action=sendEmailCode&correo=${correoDash}`, {
         method: 'get'
     }).then(function (request) {
         // Se verifica si la petición es correcta, de lo contrario se muestra un mensaje indicando el problema.
@@ -105,7 +112,7 @@ document.getElementById('verificarCodigo-form').addEventListener('submit', funct
     document.getElementById('codigoAuth').value = uno + dos + tres + cuatro + cinco + seis;
 
     event.preventDefault();
-    fetch(API_USUARIOS + 'verifyCodeEmail', {
+    fetch(api_usuarioDash + 'verifyCodeEmail', {
         method: 'post',
         body: new FormData(document.getElementById('verificarCodigo-form'))
     }).then(function (request) {
@@ -130,7 +137,7 @@ document.getElementById('verificarCodigo-form').addEventListener('submit', funct
 });
 
 function contadorVisitas(){
-    fetch(API_VISITA + 'contadorVisitas', {
+    fetch(api_visitaDash + 'contadorVisitas', {
         method: 'get'
     }).then(function (request) {
         // Se verifica si la petición es correcta, de lo contrario se muestra un mensaje indicando el problema.
@@ -157,7 +164,7 @@ document.getElementById('verificarDui-form').addEventListener('submit', function
     //Evento para evitar que recargue la pagina
     event.preventDefault();
     //Fetch para verificar por el dui
-    fetch(API_VISITA + 'checkVisitDui', {
+    fetch(api_visitaDash + 'checkVisitDui', {
         method:'post',
         body: new FormData(document.getElementById('verificarDui-form'))
     }).then(request => {
@@ -189,7 +196,7 @@ document.getElementById('verificarPlaca-form').addEventListener('submit', functi
     //Evento para evitar que recargue la pagina
     event.preventDefault();
     //Fetch para verificar por el dui
-    fetch(API_VISITA + 'checkVisitPlaca', {
+    fetch(api_visitaDash + 'checkVisitPlaca', {
         method:'post',
         body: new FormData(document.getElementById('verificarPlaca-form'))
     }).then(request => {
@@ -231,7 +238,7 @@ document.getElementById('info-form').addEventListener('submit', function (event)
     //Evento para evitar que recargue la pagina
     event.preventDefault();
     //Fetch para finalizar la visita
-    fetch(API_VISITA + 'finishVisit', {
+    fetch(api_visitaDash + 'finishVisit', {
         method:'post',
         body: new FormData(document.getElementById('info-form'))
     }).then(request => {
@@ -261,7 +268,7 @@ document.getElementById('info-form').addEventListener('submit', function (event)
 
 
 function createSesionHistory(){
-    fetch(API_USUARIOS + 'createSesionHistory', {
+    fetch(`http://34.125.57.125/app/api/caseta/usuarios.php?id=${idDash}&action=createSesionHistory&ip=${ip}`, {
         method: 'get'
     }).then(function (request) {
         // Se verifica si la petición es correcta, de lo contrario se muestra un mensaje indicando el problema.

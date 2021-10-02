@@ -4,9 +4,6 @@
     require_once('../../models/visitas.php');
 
     if (isset($_GET['action'])) {
-        //Reanudando la sesion
-        session_start();
-
         //Objeto para instanciar la clase
         $visitas = new Visitas();
 
@@ -14,7 +11,7 @@
         $result = array('status'=>0, 'error'=>0, 'message'=>null, 'exception'=>null);
 
         //Acciones a ejecutar permitidas con la sesion iniciada
-        if (isset($_SESSION['idusuario_caseta'])) {
+        if (isset($_GET['id'])) {
             switch($_GET['action']){
                 //Caso para contar las visitas activas
                 case 'contadorVisitas':

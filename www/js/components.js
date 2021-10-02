@@ -37,17 +37,6 @@ function loadPage(){
         document.documentElement.style.setProperty('--color-amarillo', 'rgb(255, 246, 186)');
         document.documentElement.style.setProperty('--color-amarillo-hover', 'rgb(112, 98, 2)');
         document.documentElement.style.setProperty('--color-citiger-claro', '#c5dcff');
-
-        //Se cambia la imagen del boton de inicio para que coincida con el modo
-        document.getElementById('imgDashboard').src = '../../resources/img/CitigerWhiteLogo2.png';
-        document.getElementById('imgDashboard2').src = '../../resources/img/CitigerWhiteLogo2.png';
-
-        //Se ocultan/muestran los botones indicados para cambiar de modo posteriormente
-        document.getElementById('lightMode').className = 'd-none';
-        document.getElementById('darkMode').className = 'btn fas fa-moon botonesPerfil';
-
-        document.getElementById('lightMode2').className = 'd-none';
-        document.getElementById('darkMode2').className = 'btn fas fa-moon botonesPerfil';
       
     } else if (modo == 'dark') {
         //Modo oscuro
@@ -66,16 +55,6 @@ function loadPage(){
         document.documentElement.style.setProperty('--color-amarillo', 'rgb(41, 36, 3)');
         document.documentElement.style.setProperty('--color-amarillo-hover', 'rgb(255, 221, 0)');
         document.documentElement.style.setProperty('--color-citiger-claro', '#0b1d35');
-
-        //Se cambia la imagen del boton de inicio para que coincida con el modo
-        document.getElementById('imgDashboard').src = '../../resources/img/citigerDarkLogo2.png';
-        document.getElementById('imgDashboard2').src = '../../resources/img/citigerDarkLogo2.png';
-
-        document.getElementById('lightMode').className = 'btn fas fa-sun botonesPerfil';
-        document.getElementById('darkMode').className = 'd-none';
-
-        document.getElementById('lightMode2').className = 'btn fas fa-sun botonesPerfil';
-        document.getElementById('darkMode2').className = 'd-none';
     } else {
         console.log('error');
     }
@@ -119,8 +98,7 @@ function isLogged(id,alias,foto,tipo,modo) {
                                     <div class="col-9">
                                         <label for="ajustes" class="pl-4 pt-2" id="usuario">${alias}</label><br>
                                         <label for="ajustes" class="pl-4" id="tipoUsuario">${tipo}</label>
-                                        <input type="text" id="txtModo" class="d-none"
-                                                        value="${modo}">
+                                        
                                     </div>
                                 </div>
                             </div>
@@ -192,9 +170,9 @@ function isLogged(id,alias,foto,tipo,modo) {
                                         </a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="#" class="nav-link" id="lightModeCaseta" onclick="lightMode3()"><i
+                                        <a href="#" class="nav-link" id="lightModeCaseta2" onclick="lightMode3()"><i
                                                 class="fas fa-sun mr-3 tamañoIconos"></i>Dia</a>
-                                        <a href="#" class="nav-link" id="darkModeCaseta" onclick="darkMode3()"><i
+                                        <a href="#" class="nav-link" id="darkModeCaseta2" onclick="darkMode3()"><i
                                                 class="fas fa-moon mr-3 tamañoIconos"></i>Nocturno</a>
                                     </li>
                                     <li class="nav-item">
@@ -210,6 +188,31 @@ function isLogged(id,alias,foto,tipo,modo) {
                     `;
                     // Se agregan las filas al cuerpo de la tabla mediante su id para mostrar los registros.
                     document.getElementById('nav').innerHTML = content;
+                    //Seteando imagenes y ocutando botones según modo
+                    if (modo == 'light') {
+                         //Se cambia la imagen del boton de inicio para que coincida con el modo
+                        document.getElementById('imgDashboard').src = 'http://34.125.57.125/resources/img/CitigerWhiteLogo2.png';
+                        document.getElementById('imgDashboard2').src = 'http://34.125.57.125/resources/img/CitigerWhiteLogo2.png';
+                        //Se ocultan/muestran los botones indicados para cambiar de modo posteriormente del sidebar
+                        document.getElementById('lightModeCaseta').className = 'd-none';
+                        document.getElementById('darkModeCaseta').className = 'nav-link';
+
+                        //Se ocultan/muestran los botones indicados para cambiar de modo posteriormente del sidebar
+                        document.getElementById('lightModeCaseta2').className = 'd-none';
+                        document.getElementById('darkModeCaseta2').className = 'nav-link';
+
+                    } else if (modo == 'dark') {
+                         //Se cambia la imagen del boton de inicio para que coincida con el modo
+                        document.getElementById('imgDashboard').src = 'http://34.125.57.125/resources/img/citigerDarkLogo2.png';
+                        document.getElementById('imgDashboard2').src = 'http://34.125.57.125/resources/img/citigerDarkLogo2.png';
+                        //Se ocultan/muestran los botones indicados para cambiar de modo posteriormente del sidebar
+                        document.getElementById('lightModeCaseta').className = 'nav-link';
+                        document.getElementById('darkModeCaseta').className = 'd-none';
+
+                        //Se ocultan/muestran los botones indicados para cambiar de modo posteriormente del navbar
+                        document.getElementById('lightModeCaseta2').className = 'nav-link';
+                        document.getElementById('darkModeCaseta2').className = 'd-none';
+                    }
                 } else if (response.error) {
                     window.location.href = '../index.html';
                 }

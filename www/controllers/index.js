@@ -7,6 +7,7 @@ var fotoIndex;
 var tipoIndex;
 var modoIndex;
 var correoIndex;
+var ipIndex;
 
 //Constante para la ruta API
 const API_USUARIO = 'http://34.125.57.125/app/api/caseta/usuarios.php?action=';
@@ -22,6 +23,7 @@ document.addEventListener('DOMContentLoaded', function () {
     tipoIndex = params.get('tipo');
     modoIndex = params.get('modo');
     correoIndex = params.get('correo');
+    ipIndex = params.get('ip');
     if (idIndex > 0){
         // Constante para establecer la ruta y parámetros de comunicación con la API.
         api_usuarioIndex = `http://34.125.57.125/app/api/caseta/usuarios.php?id=${id}&action=`;
@@ -51,7 +53,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                     request.json().then(response => {
                                         //Se verifica si la respuesta no es correcta para redireccionar al primer uso
                                         if (response.status) {
-                                            window.location.href = `html/dashboard.html?id=${id}&alias=${alias}&foto=${foto}&tipo=${tipo}&modo=${modo}`;
+                                            window.location.href = `html/dashboard.html?id=${id}&alias=${alias}&foto=${foto}&tipo=${tipo}&modo=${modo}&ip=${ipIndex}`;
                                         }
                                     })
                                 } else {
@@ -100,7 +102,7 @@ document.getElementById('login-form').addEventListener('submit', function (event
                         sendVerificationCodeAuth(response.correo_caseta,response.alias_caseta);
                         openModal('verificarCodigoAuth')
                     } else {
-                        sweetAlert(1, response.message, `html/dashboard.html?id=${response.idusuario_caseta}&alias=${response.usuario_caseta}&foto=${response.foto_caseta}&tipo=${response.tipousuario_caseta}&modo=${response.modo_caseta}&correo=${response.correo_caseta}`);
+                        sweetAlert(1, response.message, `html/dashboard.html?id=${response.idusuario_caseta}&alias=${response.usuario_caseta}&foto=${response.foto_caseta}&tipo=${response.tipousuario_caseta}&modo=${response.modo_caseta}&correo=${response.correo_caseta}&ip=${response.ipusuario_caseta}`);
                     }
                 } else {
                     if (response.error) {
@@ -160,7 +162,7 @@ document.getElementById('checkCodeAuth-form').addEventListener('submit', functio
                 if (response.status) {
                     // Mostramos mensaje de exito
                     closeModal('verificarCodigoAuth');
-                    sweetAlert(1, response.message, `html/dashboard.html?id=${id}&alias=${alias}&foto=${foto}&tipo=${tipo}&modo=${modo}`);
+                    sweetAlert(1, response.message, `html/dashboard.html?id=${id}&alias=${alias}&foto=${foto}&tipo=${tipo}&modo=${modo}&ip=${ipIndex}`);
                 } else {
                     sweetAlert(2, response.exception, null);
                 }
@@ -222,7 +224,7 @@ document.getElementById('90password-form').addEventListener('submit', function (
             request.json().then(response => {
                 //Verificando si la respuesta es satisfactoria de lo contrario se muestra la excepción
                 if (response.status) {
-                    sweetAlert(1, response.message, `html/dashboard.html?id=${id}&alias=${alias}&foto=${foto}&tipo=${tipo}&modo=${modo}`);
+                    sweetAlert(1, response.message, `html/dashboard.html?id=${id}&alias=${alias}&foto=${foto}&tipo=${tipo}&modo=${modo}&ip=${ipIndex}`);
                 } else {
                     sweetAlert(2, response.exception, null);
                 }
