@@ -541,8 +541,9 @@ document.getElementById('email-form').addEventListener('submit',function(event){
             request.json().then(function (response) {
                 // Se comprueba si la respuesta es satisfactoria, de lo contrario se muestra un mensaje con la excepción.
                 if (response.status) {
+                    var corre = document.getElementById('txtNuevoCorreo').value;
                     closeModal('administrarEmail');
-                    sweetAlert(1, response.message, `../html/ajustes_cuenta.html?id=${idCuenta}&alias=${aliasCuenta}&foto=${fotoCuenta}&tipo=${tipoCuenta}&modo=${modoCuenta}&ip=${ipCuenta}&correo=${correoCuenta}`);
+                    sweetAlert(1, response.message, `../html/ajustes_cuenta.html?id=${idCuenta}&alias=${aliasCuenta}&foto=${fotoCuenta}&tipo=${tipoCuenta}&modo=${modoCuenta}&ip=${ipCuenta}&correo=${corre}`);
                 } else {
                     sweetAlert(4, response.exception, null);
                 }
