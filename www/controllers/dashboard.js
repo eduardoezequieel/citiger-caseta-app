@@ -123,7 +123,7 @@ document.getElementById('verificarCodigo-form').addEventListener('submit', funct
                 if (response.status) {
                     // Mostramos mensaje de exito
                     closeModal('verificarCorreo');
-                    sweetAlert(1, response.message, `../html/dashboard.html?id=${idDash}&alias=${aliasDash}&foto=${fotoDash}&tipo=${tipoDash}&modo=light&ip=${ipDash}&correo=${correoDash}`);
+                    sweetAlert(1, response.message, `../html/dashboard.html?id=${idDash}&alias=${aliasDash}&foto=${fotoDash}&tipo=${tipoDash}&modo=${modoDash}&ip=${ip}&correo=${correoDash}`);
                 } else {
                     sweetAlert(4, response.exception, null);
                 }
@@ -292,7 +292,7 @@ function createSesionHistory(){
 
 //Función para abrir formulario de visitas
 function openVisitas(){
-    window.location.href = `../html/visitas.html?id=${idDash}&alias=${aliasDash}&foto=${fotoDash}&tipo=${tipoDash}&modo=light&ip=${ip}&correo=${correoDash}`;
+    window.location.href = `../html/visitas.html?id=${idDash}&alias=${aliasDash}&foto=${fotoDash}&tipo=${tipoDash}&modo=${modoDash}&ip=${ip}&correo=${correoDash}`;
 }
 
 // Apartado para poner las mascaras a los imput de DUI y telefono

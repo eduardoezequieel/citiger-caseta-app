@@ -570,8 +570,9 @@ document.getElementById('username-form').addEventListener('submit',function(even
             request.json().then(function (response) {
                 // Se comprueba si la respuesta es satisfactoria, de lo contrario se muestra un mensaje con la excepción.
                 if (response.status) {
+                    var user = document.getElementById('txtNuevoUsuario').value;
                     closeModal('administrarUsuario');
-                    sweetAlert(1, response.message, `../html/ajustes_cuenta.html?id=${idCuenta}&alias=${aliasCuenta}&foto=${fotoCuenta}&tipo=${tipoCuenta}&modo=${modoCuenta}&ip=${ipCuenta}&correo=${correoCuenta}`);
+                    sweetAlert(1, response.message, `../html/ajustes_cuenta.html?id=${idCuenta}&alias=${user}&foto=${fotoCuenta}&tipo=${tipoCuenta}&modo=${modoCuenta}&ip=${ipCuenta}&correo=${correoCuenta}`);
                 } else {
                     sweetAlert(4, response.exception, null);
                 }
