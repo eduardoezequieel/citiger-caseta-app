@@ -53,7 +53,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                     request.json().then(response => {
                                         //Se verifica si la respuesta no es correcta para redireccionar al primer uso
                                         if (response.status) {
-                                            window.location.href = `html/dashboard.html?id=${id}&alias=${alias}&foto=${foto}&tipo=${tipo}&modo=${modo}&ip=${ipIndex}`;
+                                            window.location.href = `html/dashboard.html?id=${idIndex}&alias=${aliasIndex}&foto=${fotoIndex}&tipo=${tipoIndex}&modo=${modoIndex}&ip=${ipIndex}`;
                                         }
                                     })
                                 } else {
@@ -162,7 +162,7 @@ document.getElementById('checkCodeAuth-form').addEventListener('submit', functio
                 if (response.status) {
                     // Mostramos mensaje de exito
                     closeModal('verificarCodigoAuth');
-                    sweetAlert(1, response.message, `html/dashboard.html?id=${id}&alias=${alias}&foto=${foto}&tipo=${tipo}&modo=${modo}&ip=${ipIndex}`);
+                    sweetAlert(1, response.message, `html/dashboard.html?id=${idIndex}&alias=${aliasIndex}&foto=${fotoIndex}&tipo=${tipoIndex}&modo=${modoIndex}&ip=${ipIndex}`);
                 } else {
                     sweetAlert(2, response.exception, null);
                 }
@@ -224,7 +224,7 @@ document.getElementById('90password-form').addEventListener('submit', function (
             request.json().then(response => {
                 //Verificando si la respuesta es satisfactoria de lo contrario se muestra la excepción
                 if (response.status) {
-                    sweetAlert(1, response.message, `html/dashboard.html?id=${id}&alias=${alias}&foto=${foto}&tipo=${tipo}&modo=${modo}&ip=${ipIndex}`);
+                    sweetAlert(1, response.message, `html/dashboard.html?id=${idIndex}&alias=${aliasIndex}&foto=${fotoIndex}&tipo=${tipoIndex}&modo=${modoIndex}&ip=${ipIndex}`);
                 } else {
                     sweetAlert(2, response.exception, null);
                 }

@@ -61,7 +61,7 @@ function loadPage(){
 };
 
 //Función para cargar el encabezado
-function isLogged(id,alias,foto,tipo,modo) {
+function isLogged(id,alias,foto,tipo,modo,ip) {
     console.log(modo);
     //Declarando apis cuando hay un usuario loggueado o no
     var api_nav;
@@ -82,7 +82,7 @@ function isLogged(id,alias,foto,tipo,modo) {
                     <div class="vertical-nav colorCitiger" id="sidebar">
                         <div class="py-3 px-3 colorCitiger">
                             <div class="media d-flex">
-                                <a href="../html/dashboard.html?id=${id}&alias=${alias}&foto=${foto}&tipo=${tipo}&modo=${modo}" id="btnDashboard" class="btn btnInicio"><img src="http://34.125.57.125/resources/img/citigerDarkLogo2.png"
+                                <a href="../html/dashboard.html?id=${id}&alias=${alias}&foto=${foto}&tipo=${tipo}&modo=${modo}&ip=${ip}" id="btnDashboard" class="btn btnInicio"><img src="http://34.125.57.125/resources/img/citigerDarkLogo2.png"
                                         alt="#" id="imgDashboard" class="img-fluid" width="140px"></a>
                             </div>
                         </div>
@@ -107,15 +107,15 @@ function isLogged(id,alias,foto,tipo,modo) {
                         <!-- Botones de Navegación -->
                         <ul class="nav flex-column colorCitiger mt-4">
                             <li class="nav-item">
-                                <a href="../html/ajustes_cuenta.html?id=${id}&alias=${alias}&foto=${foto}&tipo=${tipo}&modo=${modo}" class="nav-link ">
+                                <a href="../html/ajustes_cuenta.html?id=${id}&alias=${alias}&foto=${foto}&tipo=${tipo}&modo=${modo}&ip=${ip}" class="nav-link ">
                                     <i class="fas fa-cog mr-3 tamañoIconos"></i>
                                     Ajustes
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="#" class="nav-link" id="lightModeCaseta" onclick="lightMode3()"><i
+                                <a href="#" class="nav-link" id="lightModeCaseta" onclick="lightMode3(${id},'${alias}','${foto}','${tipo}','${ip}')"><i
                                         class="fas fa-sun mr-3 tamañoIconos"></i>Dia</a>
-                                <a href="#" class="nav-link" id="darkModeCaseta" onclick="darkMode3()"><i
+                                <a href="#" class="nav-link" id="darkModeCaseta" onclick="darkMode3(${id},'${alias}','${foto}','${tipo}','${ip}')"><i
                                         class="fas fa-moon mr-3 tamañoIconos"></i>Nocturno</a>
                             </li>
                             <li class="nav-item">
@@ -130,7 +130,7 @@ function isLogged(id,alias,foto,tipo,modo) {
                 
                     <!-- Inicio del navbar para dispositivos moviles -->
                     <nav id="navbar" class="d-none navbar sticky-top navbar-expand-lg">
-                        <a class="navbar-brand" href="../html/dashboard.html?id=${id}&alias=${alias}&foto=${foto}&tipo=${tipo}&modo=${modo}">
+                        <a class="navbar-brand" href="../html/dashboard.html?id=${id}&alias=${alias}&foto=${foto}&tipo=${tipo}&modo=${modo}&ip=${ip}">
                             <img src="http://34.125.57.125/resources/img/citigerDarkLogo2.png" alt="#" id="imgDashboard2" class="img-fluid" width="120px"></a>
                         </a>
                         <button class="btn bg-darken2 mt-2 float-right" type="button" data-toggle="collapse"
@@ -164,15 +164,15 @@ function isLogged(id,alias,foto,tipo,modo) {
                             <ul class="navbar-nav mr-auto d-flex justify-content-center align-items-center colorCitiger mt-4 bg-dark">
                                 <div>
                                     <li class="nav-item">
-                                        <a href="../html/ajustes_cuenta.html?id=${id}&alias=${alias}&foto=${foto}&tipo=${tipo}&modo=${modo}"" class="nav-link">
+                                        <a href="../html/ajustes_cuenta.html?id=${id}&alias=${alias}&foto=${foto}&tipo=${tipo}&modo=${modo}&ip=${ip}"" class="nav-link">
                                             <i class="fas fa-cog mr-3 tamañoIconos"></i>
                                             Ajustes
                                         </a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="#" class="nav-link" id="lightModeCaseta2" onclick="lightMode3()"><i
+                                        <a href="#" class="nav-link" id="lightModeCaseta2" onclick="lightMode3(${id},'${alias}','${foto}','${tipo}','${ip}')"><i
                                                 class="fas fa-sun mr-3 tamañoIconos"></i>Dia</a>
-                                        <a href="#" class="nav-link" id="darkModeCaseta2" onclick="darkMode3()"><i
+                                        <a href="#" class="nav-link" id="darkModeCaseta2" onclick="darkMode3(${id},'${alias}','${foto}','${tipo}','${ip}')"><i
                                                 class="fas fa-moon mr-3 tamañoIconos"></i>Nocturno</a>
                                     </li>
                                     <li class="nav-item">
@@ -318,20 +318,20 @@ function setLightValue2(){
 }
 
 //Funciones para cambiar entre modo oscuro y claro en los residentes
-function lightMode3(){
+function lightMode3(id,alias,foto,tipo,ipp){
     //Modo claro
-    setLightValue3();
-    sweetAlert(1, 'Modo claro activado correctamente.', 'dashboard.php');
+    setLightValue3(id);
+    sweetAlert(1, 'Modo claro activado correctamente.',`../html/dashboard.html?id=${id}&alias=${alias}&foto=${foto}&tipo=${tipo}&modo=light&ip=${ipp}`);
 }
 
-function darkMode3(){
+function darkMode3(id,alias,foto,tipo,ipp){
     //Modo oscuro
-    setDarkValue3();
-    sweetAlert(1, 'Modo oscuro activado correctamente.', 'dashboard.php');
+    setDarkValue3(id);
+    sweetAlert(1, 'Modo oscuro activado correctamente.',`../html/dashboard.html?id=${id}&alias=${alias}&foto=${foto}&tipo=${tipo}&modo=dark&ip=${ipp}`);
 }
 
-function setDarkValue3(){ 
-    fetch('../../app/api/caseta/usuarios.php?action=setDarkMode')
+function setDarkValue3(id){ 
+    fetch(`http://34.125.57.125/app/api/caseta/usuarios.php?action=setDarkMode&id=${id}`)
     .then(request => {
         //Se verifica si la petición fue correcta
         if (request.ok) {
@@ -347,8 +347,8 @@ function setDarkValue3(){
     }).catch(error => console.log(error))
 }
 
-function setLightValue3(){ 
-    fetch('../../app/api/caseta/usuarios.php?action=setLightMode')
+function setLightValue3(id){ 
+    fetch(`http://34.125.57.125/app/api/caseta/usuarios.php?action=setLightMode&id=${id}`)
     .then(request => {
         //Se verifica si la petición fue correcta
         if (request.ok) {

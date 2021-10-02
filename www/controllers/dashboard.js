@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', function () {
     ip = params.get('ip');
     document.getElementById('txtModo').value = modoDash;
     //Imprimiendo el navbar
-    isLogged(idDash,aliasDash,fotoDash,tipoDash,modoDash);
+    isLogged(idDash,aliasDash,fotoDash,tipoDash,modoDash,ip);
     //Poniendo mensaje de bienvenida al usuario
     document.getElementById('bienvenida').textContent = `¡Bienvenido ${aliasDash}!`;
     //Verificando si hay algún id
