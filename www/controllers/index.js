@@ -45,21 +45,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     if (!response.status) {
                         sweetAlert(3, response.exception, null);
                     } else {
-                        //Verificando si hay una sesión iniciada
-                        fetch(api_usuarioIndex + 'validateSession')
-                            .then(request => {
-                                //Se verifica si la petición fue correcta
-                                if (request.ok) {
-                                    request.json().then(response => {
-                                        //Se verifica si la respuesta no es correcta para redireccionar al primer uso
-                                        if (response.status) {
-                                            window.location.href = `html/dashboard.html?id=${idIndex}&alias=${aliasIndex}&foto=${fotoIndex}&tipo=${tipoIndex}&modo=${modoIndex}&ip=${ipIndex}`;
-                                        }
-                                    })
-                                } else {
-                                    sweetAlert(2, response.exception, null);
-                                }
-                            }).catch(error => sweetAlert(2, error, null))
+                        
                     }
                 })
             } else {
@@ -96,13 +82,14 @@ document.getElementById('login-form').addEventListener('submit', function (event
                     tipoIndex = response.tipousuario_caseta;
                     modoIndex = response.modo_caseta;
                     correoIndex = response.correo_caseta;
+                    ipIndex = response.ipusuario_caseta;
                     if (response.auth) {
                         id_tmp = 0;
-                        id_tmp = response.idusuario_caseta_tmp;
+                        id_tmp = response.idusuario_caseta;
                         sendVerificationCodeAuth(response.correo_caseta,response.alias_caseta);
                         openModal('verificarCodigoAuth')
                     } else {
-                        sweetAlert(1, response.message, `html/dashboard.html?id=${response.idusuario_caseta}&alias=${response.usuario_caseta}&foto=${response.foto_caseta}&tipo=${response.tipousuario_caseta}&modo=${response.modo_caseta}&correo=${response.correo_caseta}&ip=${response.ipusuario_caseta}`);
+                        sweetAlert(1, response.message, `../html/dashboard.html?id=${response.idusuario_caseta}&alias=${response.usuario_caseta}&foto=${response.foto_caseta}&tipo=${response.tipousuario_caseta}&modo=${response.modo_caseta}&correo=${response.correo_caseta}&ip=${response.ipusuario_caseta}`);
                     }
                 } else {
                     if (response.error) {
@@ -121,7 +108,8 @@ document.getElementById('login-form').addEventListener('submit', function (event
 
 //Enviar código de verificación
 function sendVerificationCodeAuth(correo,alias){
-    fetch(`http://34.125.57.125/app/api/caseta/usuarios.php?action=sendVerificationCode&correo${correo}&alias=${alias}`)
+    console.log(correo);
+    fetch(`http://34.125.57.125/app/api/caseta/usuarios.php?action=sendVerificationCode&correo=${correo}&alias=${alias}`)
         .then(request => {
             //Se verifica si la petición fue correcta
             if (request.ok) {
@@ -151,7 +139,7 @@ document.getElementById('checkCodeAuth-form').addEventListener('submit', functio
     console.log(document.getElementById('codigoAuth').value);
 
     event.preventDefault();
-    fetch(`http://34.125.57.125/app/api/caseta/usuarios.php?action=verifyCodeAuth&id_tmp${id_tmp}`, {
+    fetch(`http://34.125.57.125/app/api/caseta/usuarios.php?action=verifyCodeAuth&id_tmp=${id_tmp}`, {
         method: 'post',
         body: new FormData(document.getElementById('checkCodeAuth-form'))
     }).then(function (request) {
@@ -162,7 +150,7 @@ document.getElementById('checkCodeAuth-form').addEventListener('submit', functio
                 if (response.status) {
                     // Mostramos mensaje de exito
                     closeModal('verificarCodigoAuth');
-                    sweetAlert(1, response.message, `html/dashboard.html?id=${idIndex}&alias=${aliasIndex}&foto=${fotoIndex}&tipo=${tipoIndex}&modo=${modoIndex}&ip=${ipIndex}`);
+                    sweetAlert(1, response.message, `../html/dashboard.html?id=${idIndex}&alias=${aliasIndex}&foto=${fotoIndex}&tipo=${tipoIndex}&modo=light&ip=${ipIndex}&correo=${correoIndex}`);
                 } else {
                     sweetAlert(2, response.exception, null);
                 }
@@ -215,7 +203,7 @@ function checkBlockUsers() {
 document.getElementById('90password-form').addEventListener('submit', function (event) {
     event.preventDefault();
     //Verificando las credenciales del usuario
-    fetch(`http://34.125.57.125/app/api/caseta/usuarios.php?action=changePassword&id_tmp${id_tmp}`, {
+    fetch(`http://34.125.57.125/app/api/caseta/usuarios.php?action=changePassword&id_tmp=${id_tmp}`, {
         method: 'post',
         body: new FormData(document.getElementById('90password-form'))
     }).then(request => {
@@ -224,7 +212,7 @@ document.getElementById('90password-form').addEventListener('submit', function (
             request.json().then(response => {
                 //Verificando si la respuesta es satisfactoria de lo contrario se muestra la excepción
                 if (response.status) {
-                    sweetAlert(1, response.message, `html/dashboard.html?id=${idIndex}&alias=${aliasIndex}&foto=${fotoIndex}&tipo=${tipoIndex}&modo=${modoIndex}&ip=${ipIndex}`);
+                    sweetAlert(1, response.message, `../html/dashboard.html?id=${idIndex}&alias=${aliasIndex}&foto=${fotoIndex}&tipo=${tipoIndex}&modo=light&ip=${ipIndex}&correo=${correoIndex}`);
                 } else {
                     sweetAlert(2, response.exception, null);
                 }
@@ -310,7 +298,7 @@ document.getElementById('checkCode-form').addEventListener('submit', function (e
     document.getElementById('codigo').value = uno + dos + tres + cuatro + cinco + seis;
 
     event.preventDefault();
-    fetch(`http://34.125.57.125/app/api/caseta/usuarios.php?action=verifyCode&id_tmp${id_tmp}`, {
+    fetch(`http://34.125.57.125/app/api/caseta/usuarios.php?action=verifyCode&id_tmp=${id_tmp}`, {
         method: 'post',
         body: new FormData(document.getElementById('checkCode-form'))
     }).then(function (request) {
@@ -368,7 +356,7 @@ document.getElementById('update-form').addEventListener('submit', function (even
                 sweetAlert(3, 'Las claves ingresadas deben ser iguales', null);
             } else {
                 // Realizamos peticion a la API de clientes con el caso changePass y method post para dar acceso al valor de los campos del form
-                fetch(`http://34.125.57.125/app/api/caseta/usuarios.php?action=changePass&id_tmp${id_tmp}`, {
+                fetch(`http://34.125.57.125/app/api/caseta/usuarios.php?action=changePass&id_tmp=${id_tmp}`, {
                     method: 'post',
                     body: new FormData(document.getElementById('update-form'))
                 }).then(function (request) {

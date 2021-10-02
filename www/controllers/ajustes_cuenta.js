@@ -1,6 +1,32 @@
-const API_USUARIOS = '../../app/api/caseta/usuarios.php?action=';
+//Declarando variables de la url
+var api_usuarioCuenta;
+var idCuenta;
+var aliasCuenta;
+var fotoCuenta;
+var tipoCuenta;
+var modoCuenta;
+var correoCuenta;
+var ipCuenta;
+//Evento que se ejecuta cuando recarga la pagina
 document.addEventListener('DOMContentLoaded', function () {
-
+    let params = new URLSearchParams(location.search)
+    // Se obtienen los datos localizados por medio de las variables.
+    idCuenta = params.get('id');
+    aliasCuenta = params.get('alias');
+    fotoCuenta = params.get('foto');
+    tipoCuenta= params.get('tipo');
+    modoCuenta = params.get('modo');
+    correoCuenta = params.get('correo');
+    ipCuenta = params.get('ip');
+    document.getElementById('txtModo').value = modoCuenta;
+    //Imprimiendo el navbar
+    isLogged(idCuenta,aliasCuenta,fotoCuenta,tipoCuenta,modoCuenta,ipCuenta,correoCuenta);
+    //Verificando si hay algún id
+    if (idCuenta > 0) {
+        api_usuarioCuenta = `http://34.125.57.125/app/api/caseta/usuarios.php?id=${idCuenta}&action=`;
+    } else {
+        api_usuarioCuenta = 'http://34.125.57.125/app/api/caseta/usuarios.php?action=';
+    }
     // Se declara e inicializa un objeto para obtener la fecha y hora actual.
     let today = new Date();
     // Se declara e inicializa una variable para guardar el día en formato de 2 dígitos.
@@ -14,10 +40,10 @@ document.addEventListener('DOMContentLoaded', function () {
     // Se asigna la fecha como valor máximo en el campo del formulario.
     document.getElementById('txtFechaNacimiento').setAttribute('max', date);
     document.getElementById('txtFechaNacimiento').setAttribute('value', date);
-    readRows3(API_USUARIOS);
+    readRows3(api_usuarioCuenta);
 
 
-    fetch(API_USUARIOS + 'readProfile2', {
+    fetch(api_usuarioCuenta + 'readProfile2', {
         method: 'get',
     }).then(function (request) {
         // Se verifica si la petición es correcta, de lo contrario se muestra un mensaje indicando el problema.
@@ -49,7 +75,7 @@ document.addEventListener('DOMContentLoaded', function () {
         console.log(error);
     });
 
-    fetch(API_USUARIOS + 'getAuthMode', {
+    fetch(api_usuarioCuenta + 'getAuthMode', {
         method: 'get',
     }).then(function (request) {
         // Se verifica si la petición es correcta, de lo contrario se muestra un mensaje indicando el problema.
@@ -83,7 +109,7 @@ document.getElementById('password-form').addEventListener('submit',function(even
     //Evitamos recargar la pagina
     event.preventDefault();
     //fetch 
-    fetch(API_USUARIOS + 'updatePassword', {
+    fetch(api_usuarioCuenta + 'updatePassword', {
         method: 'post',
         body: new FormData(document.getElementById('password-form'))
     }).then(function (request) {
@@ -93,7 +119,7 @@ document.getElementById('password-form').addEventListener('submit',function(even
                 // Se comprueba si la respuesta es satisfactoria, de lo contrario se muestra un mensaje con la excepción.
                 if (response.status) {
                     closeModal('administrarContrasena');
-                    sweetAlert(1, response.message, 'ajustes_cuenta.php');
+                    sweetAlert(1, response.message, `../html/ajustes_cuenta.html?id=${idCuenta}&alias=${aliasCuenta}&foto=${fotoCuenta}&tipo=${tipoCuenta}&modo=${modoCuenta}&ip=${ipCuenta}&correo=${correoCuenta}`);
                 } else {
                     sweetAlert(2, response.exception, null);
                 }
@@ -127,7 +153,7 @@ function showHidePassword2(checkbox, pass1, pass2, pass3) {
 function readDataOnModal() {
     // Se abre la caja de dialogo (modal) que contiene el formulario para editar perfil, ubicado en el archivo de las
 
-    fetch(API_USUARIOS + 'readProfile2', {
+    fetch(api_usuarioCuenta + 'readProfile2', {
         method: 'get'
     }).then(function (request) {
         // Se verifica si la petición es correcta, de lo contrario se muestra un mensaje indicando el problema.
@@ -158,7 +184,7 @@ function readDataOnModal() {
 
 //Se cargan los registros de sesiones fallidas
 function readFailedSessions(){
-    fetch(API_USUARIOS + 'readFailedSessions', {
+    fetch(api_usuarioCuenta + 'readFailedSessions', {
         method: 'get'
     }).then(function (request) {
         // Se verifica si la petición es correcta, de lo contrario se muestra un mensaje indicando el problema.
@@ -229,7 +255,7 @@ document.getElementById('admin-form').addEventListener('submit', function (event
     // Se evita recargar la página web después de enviar el formulario.
     event.preventDefault();
 
-    fetch(API_USUARIOS + 'editProfile', {
+    fetch(api_usuarioCuenta + 'editProfile', {
         method: 'post',
         body: new FormData(document.getElementById('admin-form'))
     }).then(function (request) {
@@ -240,7 +266,7 @@ document.getElementById('admin-form').addEventListener('submit', function (event
                 if (response.status) {
 
                     // Se muestra un mensaje y se direcciona a la página web de bienvenida para actualizar el nombre del usuario en el menú.
-                    sweetAlert(1, response.message, 'ajustes_cuenta.php');
+                    sweetAlert(1, response.message, `../html/ajustes_cuenta.html?id=${idCuenta}&alias=${aliasCuenta}&foto=${fotoCuenta}&tipo=${tipoCuenta}&modo=${modoCuenta}&ip=${ipCuenta}&correo=${correoCuenta}`);
                 } else {
                     sweetAlert(2, response.exception, null);
                 }
@@ -309,7 +335,7 @@ document.getElementById('archivo_usuario').addEventListener('change', function (
 
 document.getElementById('img-form').addEventListener('submit', function (event) {
     event.preventDefault();
-    fetch(API_USUARIOS + 'updateFoto', {
+    fetch(api_usuarioCuenta + 'updateFoto', {
         method: 'post',
         body: new FormData(document.getElementById('img-form'))
     }).then(function (request) {
@@ -319,7 +345,7 @@ document.getElementById('img-form').addEventListener('submit', function (event) 
                 // Se comprueba si la respuesta es satisfactoria, de lo contrario se muestra un mensaje con la excepción.
                 if (response.status) {
                     // Se muestra un mensaje y se direcciona a la página web de bienvenida para actualizar los datos en el menú.
-                    window.location.href = 'ajustes_cuenta.php';
+                    window.location.href = `../html/ajustes_cuenta.html?id=${idCuenta}&alias=${aliasCuenta}&foto=${fotoCuenta}&tipo=${tipoCuenta}&modo=${modoCuenta}&ip=${ipCuenta}&correo=${correoCuenta}`;
                 } else {
                     sweetAlert(2, response.exception, null);
                 }
@@ -338,7 +364,7 @@ document.getElementById('auth-form').addEventListener('submit',function(event){
     //Evitamos recargar la pagina
     event.preventDefault();
     //fetch
-    fetch(API_USUARIOS + 'updateAuthMode', {
+    fetch(api_usuarioCuenta + 'updateAuthMode', {
         method: 'post',
         body: new FormData(document.getElementById('auth-form'))
     }).then(function (request) {
@@ -349,9 +375,9 @@ document.getElementById('auth-form').addEventListener('submit',function(event){
                 if (response.status) {
                     closeModal('administrarAuth');
                     if (document.getElementById('switchValue').value == 'Si') {
-                        sweetAlert(1, 'Usted ha activado el factor de autenticación en dos pasos. Notará los cambios la proxima vez que inicié sesión.', 'ajustes_cuenta.php');
+                        sweetAlert(1, 'Usted ha activado el factor de autenticación en dos pasos. Notará los cambios la proxima vez que inicié sesión.', `../html/ajustes_cuenta.html?id=${idCuenta}&alias=${aliasCuenta}&foto=${fotoCuenta}&tipo=${tipoCuenta}&modo=${modoCuenta}&ip=${ipCuenta}&correo=${correoCuenta}`);
                     } else {
-                        sweetAlert(1, 'Usted ha desactivado el factor de autenticación en dos pasos. Notará los cambios la proxima vez que inicié sesión.', 'ajustes_cuenta.php');
+                        sweetAlert(1, 'Usted ha desactivado el factor de autenticación en dos pasos. Notará los cambios la proxima vez que inicié sesión.', `../html/ajustes_cuenta.html?id=${idCuenta}&alias=${aliasCuenta}&foto=${fotoCuenta}&tipo=${tipoCuenta}&modo=${modoCuenta}&ip=${ipCuenta}&correo=${correoCuenta}`);
                     }
                 } else {
                     sweetAlert(2, response.exception, null);
@@ -446,7 +472,7 @@ document.getElementById('btnModalContraseña').addEventListener('click',function
     //Evitamos recargar la pagina
     event.preventDefault();
     //Verificamos si el usuario tiene validado su correo
-    fetch(API_USUARIOS + 'checkIfEmailIsValidated', {
+    fetch(api_usuarioCuenta + 'checkIfEmailIsValidated', {
         method: 'get'
     }).then(function (request) {
         // Se verifica si la petición es correcta, de lo contrario se muestra un mensaje indicando el problema.
@@ -476,7 +502,7 @@ document.getElementById('btnModalAdministrarAuth').addEventListener('click',func
     //Evitamos recargar la pagina
     event.preventDefault();
     //Verificamos si el usuario tiene validado su correo
-    fetch(API_USUARIOS + 'checkIfEmailIsValidated', {
+    fetch(api_usuarioCuenta + 'checkIfEmailIsValidated', {
         method: 'get'
     }).then(function (request) {
         // Se verifica si la petición es correcta, de lo contrario se muestra un mensaje indicando el problema.
@@ -506,7 +532,7 @@ document.getElementById('email-form').addEventListener('submit',function(event){
     //Evitamos recargar la pagina
     event.preventDefault();
      //Verificamos si el usuario tiene validado su correo
-     fetch(API_USUARIOS + 'actualizarCorreo', {
+     fetch(api_usuarioCuenta + 'actualizarCorreo', {
         method: 'post',
         body: new FormData(document.getElementById('email-form'))
     }).then(function (request) {
@@ -516,7 +542,7 @@ document.getElementById('email-form').addEventListener('submit',function(event){
                 // Se comprueba si la respuesta es satisfactoria, de lo contrario se muestra un mensaje con la excepción.
                 if (response.status) {
                     closeModal('administrarEmail');
-                    sweetAlert(1, response.message, 'dashboard.php');
+                    sweetAlert(1, response.message, `../html/ajustes_cuenta.html?id=${idCuenta}&alias=${aliasCuenta}&foto=${fotoCuenta}&tipo=${tipoCuenta}&modo=${modoCuenta}&ip=${ipCuenta}&correo=${correoCuenta}`);
                 } else {
                     sweetAlert(4, response.exception, null);
                 }
@@ -534,7 +560,7 @@ document.getElementById('username-form').addEventListener('submit',function(even
     //Evitamos recargar la pagina
     event.preventDefault();
      //Verificamos si el usuario tiene validado su correo
-     fetch(API_USUARIOS + 'updateUser', {
+     fetch(api_usuarioCuenta + 'updateUser', {
         method: 'post',
         body: new FormData(document.getElementById('username-form'))
     }).then(function (request) {
@@ -544,7 +570,7 @@ document.getElementById('username-form').addEventListener('submit',function(even
                 // Se comprueba si la respuesta es satisfactoria, de lo contrario se muestra un mensaje con la excepción.
                 if (response.status) {
                     closeModal('administrarUsuario');
-                    sweetAlert(1, response.message, 'ajustes_cuenta.php');
+                    sweetAlert(1, response.message, `../html/ajustes_cuenta.html?id=${idCuenta}&alias=${aliasCuenta}&foto=${fotoCuenta}&tipo=${tipoCuenta}&modo=${modoCuenta}&ip=${ipCuenta}&correo=${correoCuenta}`);
                 } else {
                     sweetAlert(4, response.exception, null);
                 }
@@ -562,7 +588,7 @@ document.getElementById('btnAdministrarUsuarioModal').addEventListener('click',f
     //Evitamos recargar la pagina
     event.preventDefault();
     //Verificamos si el usuario tiene validado su correo
-    fetch(API_USUARIOS + 'checkIfEmailIsValidated', {
+    fetch(api_usuarioCuenta + 'checkIfEmailIsValidated', {
         method: 'get'
     }).then(function (request) {
         // Se verifica si la petición es correcta, de lo contrario se muestra un mensaje indicando el problema.

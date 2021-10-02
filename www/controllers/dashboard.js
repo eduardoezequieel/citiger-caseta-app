@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', function () {
     ip = params.get('ip');
     document.getElementById('txtModo').value = modoDash;
     //Imprimiendo el navbar
-    isLogged(idDash,aliasDash,fotoDash,tipoDash,modoDash,ip);
+    isLogged(idDash,aliasDash,fotoDash,tipoDash,modoDash,ip,correoDash);
     //Poniendo mensaje de bienvenida al usuario
     document.getElementById('bienvenida').textContent = `¡Bienvenido ${aliasDash}!`;
     //Verificando si hay algún id
@@ -123,7 +123,7 @@ document.getElementById('verificarCodigo-form').addEventListener('submit', funct
                 if (response.status) {
                     // Mostramos mensaje de exito
                     closeModal('verificarCorreo');
-                    sweetAlert(1, response.message, 'dashboard.php');
+                    sweetAlert(1, response.message, `../html/dashboard.html?id=${idDash}&alias=${aliasDash}&foto=${fotoDash}&tipo=${tipoDash}&modo=light&ip=${ipDash}&correo=${correoDash}`);
                 } else {
                     sweetAlert(4, response.exception, null);
                 }
