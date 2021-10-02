@@ -289,6 +289,11 @@ function createSesionHistory(){
     });
 }
 
+//Función para abrir formulario de visitas
+function openVisitas(){
+    window.location.href = `../html/visitas.html?id=${idDash}&alias=${aliasDash}&foto=${fotoDash}&tipo=${tipoDash}&modo=light&ip=${ip}&correo=${correoDash}`;
+}
+
 // Apartado para poner las mascaras a los imput de DUI y telefono
 $(document).ready(function(){
     $("#txtDui").mask("00000000-0");

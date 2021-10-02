@@ -89,7 +89,7 @@ document.getElementById('login-form').addEventListener('submit', function (event
                         sendVerificationCodeAuth(response.correo_caseta,response.alias_caseta);
                         openModal('verificarCodigoAuth')
                     } else {
-                        sweetAlert(1, response.message, `../html/dashboard.html?id=${response.idusuario_caseta}&alias=${response.usuario_caseta}&foto=${response.foto_caseta}&tipo=${response.tipousuario_caseta}&modo=${response.modo_caseta}&correo=${response.correo_caseta}&ip=${response.ipusuario_caseta}`);
+                        sweetAlert(1, response.message, `html/dashboard.html?id=${response.idusuario_caseta}&alias=${response.usuario_caseta}&foto=${response.foto_caseta}&tipo=${response.tipousuario_caseta}&modo=${response.modo_caseta}&correo=${response.correo_caseta}&ip=${response.ipusuario_caseta}`);
                     }
                 } else {
                     if (response.error) {
@@ -150,7 +150,7 @@ document.getElementById('checkCodeAuth-form').addEventListener('submit', functio
                 if (response.status) {
                     // Mostramos mensaje de exito
                     closeModal('verificarCodigoAuth');
-                    sweetAlert(1, response.message, `../html/dashboard.html?id=${idIndex}&alias=${aliasIndex}&foto=${fotoIndex}&tipo=${tipoIndex}&modo=light&ip=${ipIndex}&correo=${correoIndex}`);
+                    sweetAlert(1, response.message, `html/dashboard.html?id=${idIndex}&alias=${aliasIndex}&foto=${fotoIndex}&tipo=${tipoIndex}&modo=light&ip=${ipIndex}&correo=${correoIndex}`);
                 } else {
                     sweetAlert(2, response.exception, null);
                 }
@@ -212,7 +212,7 @@ document.getElementById('90password-form').addEventListener('submit', function (
             request.json().then(response => {
                 //Verificando si la respuesta es satisfactoria de lo contrario se muestra la excepción
                 if (response.status) {
-                    sweetAlert(1, response.message, `../html/dashboard.html?id=${idIndex}&alias=${aliasIndex}&foto=${fotoIndex}&tipo=${tipoIndex}&modo=light&ip=${ipIndex}&correo=${correoIndex}`);
+                    sweetAlert(1, response.message, `html/dashboard.html?id=${idIndex}&alias=${aliasIndex}&foto=${fotoIndex}&tipo=${tipoIndex}&modo=light&ip=${ipIndex}&correo=${correoIndex}`);
                 } else {
                     sweetAlert(2, response.exception, null);
                 }

@@ -1,8 +1,34 @@
-//Constante para la ruta API
-const API_VISITA = '../../app/api/caseta/visitas.php?action=';
+//Declarando variables de la url
+var api_visitaVi;
+var idVi;
+var aliasVi;
+var fotoVi;
+var tipoVi;
+var modoVi;
+var correoVi;
+var ipVi;
 
 document.addEventListener('DOMContentLoaded', function () {
-    readRows(API_VISITA);
+    let params = new URLSearchParams(location.search)
+    // Se obtienen los datos localizados por medio de las variables.
+    idVi = params.get('id');
+    aliasVi = params.get('alias');
+    fotoVi = params.get('foto');
+    tipoVi = params.get('tipo');
+    modoVi = params.get('modo');
+    correoVi = params.get('correo');
+    ip = params.get('ip');
+    document.getElementById('txtModo').value = modoVi;
+    //Imprimiendo el navbar
+    isLogged(idVi,aliasVi,fotoVi,tipoVi,modoVi,ipVi,correoVi);
+    //Verificando si hay algún id
+    if (idVi > 0) {
+        api_visitaVi = `http://34.125.57.125/app/api/caseta/visitas.php?id=${idVi}&action=`;
+    } else {
+        api_visitaVi = 'http://34.125.57.125/app/api/caseta/visitas.php?action=';
+    }
+    //Cargando info de la pagina
+    readRows(api_visitaVi);
 })
 
 function fillTable(dataset) {
@@ -16,7 +42,7 @@ function fillTable(dataset) {
                 <th scope="row">
                     <div class="row paddingTh">
                         <div class="col-12">
-                            <img src="../../resources/img/dashboard_img/residentes_fotos/${row.foto}" alt="#"
+                            <img src="http://34.125.57.125/resources/img/dashboard_img/residentes_fotos/${row.foto}" alt="#"
                                 class="rounded-circle fit-images" width="30px" height="30px">
                         </div>
                     </div>
@@ -71,8 +97,9 @@ function fillTable(dataset) {
     });
 }
 
+//Reiniciando la busqueda
 document.getElementById('btnReiniciar').addEventListener('click', function () {
-    readRows(API_VISITA);
+    readRows(api_visitaVi);
     document.getElementById('search').value='';
 });
 
@@ -81,7 +108,7 @@ document.getElementById('search-form').addEventListener('submit',function (event
     //Evitamos recargar la pagina
     event.preventDefault();
     //Llamamos la funcion
-    searchRows(API_VISITA, 'search-form');
+    searchRows(api_visitaVi, 'search-form');
 })
 
 function readDataOnModal(id) {
@@ -89,7 +116,7 @@ function readDataOnModal(id) {
     const data = new FormData();
     data.append('txtVisita', id);
 
-    fetch(API_VISITA + 'readOne', {
+    fetch(api_visitaVi + 'readOne', {
         method: 'post',
         body: data
     }).then(request => {

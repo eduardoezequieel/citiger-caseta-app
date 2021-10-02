@@ -581,7 +581,7 @@ function searchRows(api, form) {
                 if (response.status) {
                     // Se envían los datos a la función del controlador para que llene la tabla en la vista.
                     fillTable(response.dataset);
-                    sweetAlert(1, response.message, null);
+                    //sweetAlert(1, response.message, null);
                 } else {
                     sweetAlert(2, response.exception, null);
                     console.log("error");

@@ -1891,11 +1891,21 @@ textarea :-ms-input-placeholder {
 
 /*Fin del menu de alquiler*/
 
-
+#botonesVi{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
 /*Responsive*/
 
 @media screen and (max-width:1200px) {
+
+  #botonesVi{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 
   .tituloDashboard {
     text-align: center;
