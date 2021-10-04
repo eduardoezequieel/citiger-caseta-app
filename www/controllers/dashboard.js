@@ -8,8 +8,9 @@ var tipoDash;
 var modoDash;
 var correoDash;
 var ip;
+let params
 document.addEventListener('DOMContentLoaded', function () {
-    let params = new URLSearchParams(location.search)
+    params = new URLSearchParams(location.search)
     // Se obtienen los datos localizados por medio de las variables.
     idDash = params.get('id');
     aliasDash = params.get('alias');
@@ -226,6 +227,7 @@ document.getElementById('verificarPlaca-form').addEventListener('submit', functi
 //Función para llenar los datos en el modal 
 function fillInformation(dataset){
     document.getElementById('txtVisita').value = dataset.idvisita;
+    document.getElementById('txtFrecuente').value = dataset.visitarecurrente;
     document.getElementById('lblResidente').textContent = dataset.residente;
     document.getElementById('lblFecha').textContent =dataset.fecha;
     document.getElementById('lblVisitante').textContent = dataset.visitante;
@@ -271,7 +273,7 @@ document.getElementById('info-form').addEventListener('submit', function (event)
 
 
 function createSesionHistory(){
-    fetch(`http://34.125.57.125/app/api/caseta/usuarios.php?id=${idDash}&action=createSesionHistory&ip=${ip}`, {
+    fetch(`http://34.125.57.125/app/api/caseta/usuarios.php?id=${idDash}&action=createSesionHistory&ip=${params.get('ip')}&region=${params.get('region')}&sistema=${params.get('sistema')}`, {
         method: 'get'
     }).then(function (request) {
         // Se verifica si la petición es correcta, de lo contrario se muestra un mensaje indicando el problema.
