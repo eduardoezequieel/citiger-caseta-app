@@ -255,6 +255,8 @@ document.getElementById('info-form').addEventListener('submit', function (event)
                     document.getElementById('lblCasa').textContent ="";
                     document.getElementById('lblObservacion').textContent ="";
                     contadorVisitas();
+                }  else if (response.error) {
+                    sweetAlert(1,response.message,closeModal('infoVisita'))
                 } else {
                     sweetAlert(4, response.exception, null);
                 }
