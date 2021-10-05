@@ -1418,7 +1418,7 @@ function checkTelefono(input) {
 function checkAlfanumerico(i){
     document.getElementById(i).classList.remove("success");
     document.getElementById(i).classList.add("error");
-    var regex = /^[a-z0-9.]+$/i;
+    var regex = /^[A-Za-z0-9\s.]+$/g;
 
     if (document.getElementById(i).value.match(regex)) {
         document.getElementById(i).classList.remove("error");
