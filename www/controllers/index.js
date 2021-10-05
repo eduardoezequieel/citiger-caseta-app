@@ -326,6 +326,17 @@ document.getElementById('checkCode-form').addEventListener('submit', function (e
     });
 });
 
+function showHidePassword(checkbox, pass1) {
+    var check = document.getElementById(checkbox);
+    var password1 = document.getElementById(pass1);
+    //Verificando el estado del check
+    if (check.checked == true) {
+        password1.type = 'text';
+    } else {
+        password1.type = 'password';
+    }
+}
+
 //Función para mostrar o ocultar contraseñas
 function showHidePassword2(checkbox, pass1, pass2) {
     var check = document.getElementById(checkbox);

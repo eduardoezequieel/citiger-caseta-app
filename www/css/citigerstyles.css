@@ -2650,6 +2650,16 @@ textarea.success {
   border: 2px solid var(--color-verde-hover) !important;
 }
 
+div.error {
+  border: 2px dashed var(--color-rojo-hover) !important; 
+}
+
+div.success {
+  border: 2px solid var(--color-verde-hover) !important;
+  border-radius: 15px;
+}
+
+
 table.dataTable {
   width: 100%;
   margin: 0 auto;

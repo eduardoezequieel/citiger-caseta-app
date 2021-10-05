@@ -1382,6 +1382,11 @@ function showHidePassword(checkbox, pass) {
 }
 
 
+function checkCb(input) {
+    var field = document.getElementById(input);
+    field.classList.add("success");
+}
+
 function checkInput(input) {
     var field = document.getElementById(input);
     if (field.value.trim() === "") {
@@ -1394,6 +1399,23 @@ function checkInput(input) {
 
 }
 
+function checkInputHora(inicio, fin) {
+    //Obteniendo el valor de los input
+    var start1 = document.getElementById(inicio);
+    var end1 = document.getElementById(fin);
+    if (document.getElementById(inicio).value >= document.getElementById(fin).value) {
+        end1.classList.remove("success");
+        end1.classList.add("error");
+        start1.classList.remove("success");
+        start1.classList.add("error");
+    } else {
+        end1.classList.remove("error");
+        end1.classList.add("success");
+        start1.classList.remove("error");
+        start1.classList.add("success");
+    }
+}
+
 //Método para verificar telefono
 function checkTelefono(input) {
     var field = document.getElementById(input);
@@ -1404,7 +1426,7 @@ function checkTelefono(input) {
         field.classList.remove("error");
         field.classList.add("success");
 
-        if (/[0-9-]+$/i.test(field.value)) {
+        if (/^([0-9]{4})+(-)+([0-9]{4})$/i.test(field.value)) {
             field.classList.remove("error");
             field.classList.add("success");
         } else {
