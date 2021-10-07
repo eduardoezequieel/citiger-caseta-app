@@ -9,10 +9,6 @@ var modoIndex;
 var correoIndex;
 var ipIndex;
 
-//Constante para la ruta API
-const API_USUARIO = 'http://34.125.57.125/app/api/caseta/usuarios.php?action=';
-
-
 //Método para manejador de eventos cuando la pagina haya cargado
 document.addEventListener('DOMContentLoaded', function () {
     let params = new URLSearchParams(location.search)
@@ -26,11 +22,11 @@ document.addEventListener('DOMContentLoaded', function () {
     ipIndex = params.get('ip');
     if (idIndex > 0){
         // Constante para establecer la ruta y parámetros de comunicación con la API.
-        api_usuarioIndex = `http://34.125.57.125/app/api/caseta/usuarios.php?id=${id}&action=`;
+        api_usuarioIndex = `http://34.125.88.216/app/api/caseta/usuarios.php?id=${id}&action=`;
         
     } else {
         // Constante para establecer la ruta y parámetros de comunicación con la API.
-        api_usuarioIndex  = `http://34.125.57.125/app/api/caseta/usuarios.php?action=`;
+        api_usuarioIndex  = `http://34.125.88.216/app/api/caseta/usuarios.php?action=`;
         
     }
     //Metodo para activar todos los usuarios que ya cumplieron las 24 horas
@@ -86,7 +82,7 @@ document.getElementById('login-form').addEventListener('submit', function (event
                     if (response.auth) {
                         id_tmp = 0;
                         id_tmp = response.idusuario_caseta;
-                        sendVerificationCodeAuth(response.correo_caseta,response.alias_caseta);
+                        sendVerificationCodeAuth(response.correo_caseta,response.usuario_caseta);
                         openModal('verificarCodigoAuth')
                     } else {
                         sweetAlert(1, response.message, `html/dashboard.html?id=${response.idusuario_caseta}&alias=${response.usuario_caseta}&foto=${response.foto_caseta}&tipo=${response.tipousuario_caseta}&modo=${response.modo_caseta}&correo=${response.correo_caseta}&ip=${document.getElementById('txtIP').value}&region=${document.getElementById('txtLoc').value}&sistema=${document.getElementById('txtOS').value}`);
@@ -109,7 +105,7 @@ document.getElementById('login-form').addEventListener('submit', function (event
 //Enviar código de verificación
 function sendVerificationCodeAuth(correo,alias){
     console.log(correo);
-    fetch(`http://34.125.57.125/app/api/caseta/usuarios.php?action=sendVerificationCode&correo=${correo}&alias=${alias}`)
+    fetch(api_usuarioIndex + `sendVerificationCode&correo=${correo}&alias=${alias}`)
         .then(request => {
             //Se verifica si la petición fue correcta
             if (request.ok) {
@@ -139,7 +135,7 @@ document.getElementById('checkCodeAuth-form').addEventListener('submit', functio
     console.log(document.getElementById('codigoAuth').value);
 
     event.preventDefault();
-    fetch(`http://34.125.57.125/app/api/caseta/usuarios.php?action=verifyCodeAuth&id_tmp=${id_tmp}`, {
+    fetch(api_usuarioIndex + `verifyCodeAuth&id_tmp=${id_tmp}`, {
         method: 'post',
         body: new FormData(document.getElementById('checkCodeAuth-form'))
     }).then(function (request) {
@@ -203,7 +199,7 @@ function checkBlockUsers() {
 document.getElementById('90password-form').addEventListener('submit', function (event) {
     event.preventDefault();
     //Verificando las credenciales del usuario
-    fetch(`http://34.125.57.125/app/api/caseta/usuarios.php?action=changePassword&id_tmp=${id_tmp}`, {
+    fetch(api_usuarioIndex + `changePassword&id_tmp=${id_tmp}`, {
         method: 'post',
         body: new FormData(document.getElementById('90password-form'))
     }).then(request => {
@@ -286,7 +282,7 @@ document.getElementById('checkMail-form').addEventListener('submit', function (e
 });
 
 
-//Función para enviar el email
+//Función para enviar el email con el código de seguridad
 document.getElementById('checkCode-form').addEventListener('submit', function (event) {
     //Se evita que se recargue la pagina
     var uno = document.getElementById('1').value;
@@ -298,7 +294,7 @@ document.getElementById('checkCode-form').addEventListener('submit', function (e
     document.getElementById('codigo').value = uno + dos + tres + cuatro + cinco + seis;
 
     event.preventDefault();
-    fetch(`http://34.125.57.125/app/api/caseta/usuarios.php?action=verifyCode&id_tmp=${id_tmp}`, {
+    fetch(api_usuarioIndex + `verifyCode&id_tmp=${id_tmp}`, {
         method: 'post',
         body: new FormData(document.getElementById('checkCode-form'))
     }).then(function (request) {
@@ -326,6 +322,7 @@ document.getElementById('checkCode-form').addEventListener('submit', function (e
     });
 });
 
+//Función pra ocultar o mostrar la contraseña
 function showHidePassword(checkbox, pass1) {
     var check = document.getElementById(checkbox);
     var password1 = document.getElementById(pass1);
@@ -367,7 +364,7 @@ document.getElementById('update-form').addEventListener('submit', function (even
                 sweetAlert(3, 'Las claves ingresadas deben ser iguales', null);
             } else {
                 // Realizamos peticion a la API de clientes con el caso changePass y method post para dar acceso al valor de los campos del form
-                fetch(`http://34.125.57.125/app/api/caseta/usuarios.php?action=changePass&id_tmp=${id_tmp}`, {
+                fetch(api_usuarioIndex + `changePass&id_tmp=${id_tmp}`, {
                     method: 'post',
                     body: new FormData(document.getElementById('update-form'))
                 }).then(function (request) {
@@ -409,6 +406,7 @@ function autotab(current, to, prev) {
     }
 }
 
+//Función para obtener el sistema operativo
 function getOS()
 {
     var OSName="Unknown OS";

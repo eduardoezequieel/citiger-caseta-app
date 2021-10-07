@@ -26,11 +26,11 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('bienvenida').textContent = `¡Bienvenido ${aliasDash}!`;
     //Verificando si hay algún id
     if (idDash > 0) {
-        api_visitaDash = `http://34.125.57.125/app/api/caseta/visitas.php?id=${idDash}&action=`;
-        api_usuarioDash = `http://34.125.57.125/app/api/caseta/usuarios.php?id=${idDash}&action=`;
+        api_visitaDash = `http://34.125.88.216/app/api/caseta/visitas.php?id=${idDash}&action=`;
+        api_usuarioDash = `http://34.125.88.216/app/api/caseta/usuarios.php?id=${idDash}&action=`;
     } else {
-        api_visitaDash = 'http://34.125.57.125/app/api/caseta/visitas.php?action=';
-        api_usuarioDash = 'http://34.125.57.125/app/api/caseta/usuarios.php?action=';
+        api_visitaDash = 'http://34.125.88.216/app/api/caseta/visitas.php?action=';
+        api_usuarioDash = 'http://34.125.88.216/app/api/caseta/usuarios.php?action=';
     }
     //Cargando información de la pagina
     contadorVisitas();
@@ -68,9 +68,9 @@ function checkIfEmailIsValidated() {
     });
 }
 
-//Funcion para enviar un correo electronico con el codigo de verificacion
+//Funcion para enviar un correo electrónico con el codigo de verificacion
 function sendEmailCode(){
-    fetch(`http://34.125.57.125/app/api/caseta/usuarios.php?id=${idDash}&action=sendEmailCode&correo=${correoDash}`, {
+    fetch(api_usuarioDash + `sendEmailCode&correo=${correoDash}`, {
         method: 'get'
     }).then(function (request) {
         // Se verifica si la petición es correcta, de lo contrario se muestra un mensaje indicando el problema.
@@ -273,7 +273,7 @@ document.getElementById('info-form').addEventListener('submit', function (event)
 
 
 function createSesionHistory(){
-    fetch(`http://34.125.57.125/app/api/caseta/usuarios.php?id=${idDash}&action=createSesionHistory&ip=${params.get('ip')}&region=${params.get('region')}&sistema=${params.get('sistema')}`, {
+    fetch(api_usuarioDash + `createSesionHistory&ip=${params.get('ip')}&region=${params.get('region')}&sistema=${params.get('sistema')}`, {
         method: 'get'
     }).then(function (request) {
         // Se verifica si la petición es correcta, de lo contrario se muestra un mensaje indicando el problema.

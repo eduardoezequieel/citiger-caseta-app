@@ -61,14 +61,14 @@
                         <div class="form-group mb-4 animate__animated animate__bounceIn animate__slow">
                             <h1 class="tituloCajasLogin">Correo Electrónico:</h1>
                             <input type="email" class="form-control cajaTextoLogin" id="txtCorreo" name="txtCorreo"
-                                aria-describedby="emailHelp" onChange="checkCorreo('txtCorreo')"
+                                aria-describedby="emailHelp" onchange="checkCorreo('txtCorreo')"
                                 placeholder="Ingrese su correo electrónico..." Required maxlength="50">
                         </div>
                         <!-- Input Contraseña -->
                         <div class="form-group mb-1 animate__animated animate__bounceIn animate__slow">
                             <h1 class="tituloCajasLogin">Contraseña:</h1>
                             <input type="password" class="form-control cajaTextoLogin  mb-1" id="txtContrasenia"
-                                name="txtContrasenia" onChange="checkInput('txtContrasenia')"
+                                name="txtContrasenia" onchange="checkContrasena('txtContrasenia')"
                                 placeholder="Ingrese su contraseña..." Required maxlength="60">
 
                                 <div class="custom-control custom-switch mt-3">
@@ -143,7 +143,7 @@
                                 <div class="form-group">
                                     <label class="tituloCajaTextoFormulario" for="txtNuevaContrasena1">Nueva
                                         Contraseña:</label>
-                                    <input autocomplete="off" onChange="checkContrasena('txtNuevaContrasena1')"
+                                    <input autocomplete="off" onchange="checkContrasena('txtNuevaContrasena1')"
                                         type="password" class="form-control cajaTextoModal2" id="txtNuevaContrasena1"
                                         name="txtNuevaContrasena1" placeholder="" maxlength="60">
                                 </div>
@@ -153,7 +153,7 @@
                                 <div class="form-group">
                                     <label class="tituloCajaTextoFormulario" for="txtConfirmarContrasena">Confirmar
                                         Contraseña:</label>
-                                    <input autocomplete="off" onChange="checkContrasena('txtConfirmarContrasena1')"
+                                    <input autocomplete="off" onchange="checkContrasena('txtConfirmarContrasena1')"
                                         type="password" class="form-control cajaTextoModal2"
                                         id="txtConfirmarContrasena1" name="txtConfirmarContrasena1" placeholder="" maxlength="60">
                                 </div>
@@ -165,7 +165,7 @@
                                 <div class="form-group w-xl-50 w-md-50">
                                     <label class="tituloCajaTextoFormulario" for="txtContrasenaActual1">Contraseña
                                         Actual:</label>
-                                    <input autocomplete="off" onChange="checkContrasena('txtContrasenaActual1')"
+                                    <input autocomplete="off" onchange="checkContrasena('txtContrasenaActual1')"
                                         type="password" class="form-control cajaTextoModal2" id="txtContrasenaActual1"
                                         name="txtContrasenaActual1" placeholder="">
                                 </div>
@@ -319,7 +319,7 @@
                                         <h1 class="tituloCajasLogin">Correo Electrónico:</h1>
                                         <input type="email" autocomplete="off" class="form-control cajaTextoLogin"
                                             id="txtCorreoRecu" name="txtCorreoRecu" aria-describedby="emailHelp"
-                                            onChange="checkCorreo('txtCorreoRecu')"
+                                            onchange="checkCorreo('txtCorreoRecu')"
                                             placeholder="Ingrese su correo electrónico..." Required>
                                     </div>
                                 </div>
@@ -461,7 +461,7 @@
                                         <h1 class="tituloCajasLogin">Nueva Contraseña:</h1>
                                         <input type="password" class="form-control cajaTextoLogin  mb-1"
                                             id="txtContrasenia1" name="txtContrasenia1"
-                                            onChange="checkInput('txtContrasenia')"
+                                            onchange="checkContrasena('txtContrasenia1')"
                                             placeholder="Ingrese su contraseña..." Required>
                                     </div>
                                     <!-- Input Contraseña -->
@@ -469,7 +469,7 @@
                                         <h1 class="tituloCajasLogin">Confirmar Contraseña:</h1>
                                         <input type="password" class="form-control cajaTextoLogin  mb-1"
                                             id="txtContrasenia2" name="txtContrasenia2"
-                                            onChange="checkInput('txtContrasenia')"
+                                            onchange="checkContrasena('txtContrasenia2')"
                                             placeholder="Ingrese su contraseña..." Required>
                                     </div>
                                 </div>

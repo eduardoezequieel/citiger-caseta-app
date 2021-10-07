@@ -23,9 +23,9 @@ document.addEventListener('DOMContentLoaded', function () {
     isLogged(idVi,aliasVi,fotoVi,tipoVi,modoVi,ipVi,correoVi);
     //Verificando si hay algún id
     if (idVi > 0) {
-        api_visitaVi = `http://34.125.57.125/app/api/caseta/visitas.php?id=${idVi}&action=`;
+        api_visitaVi = `http://34.125.88.216/app/api/caseta/visitas.php?id=${idVi}&action=`;
     } else {
-        api_visitaVi = 'http://34.125.57.125/app/api/caseta/visitas.php?action=';
+        api_visitaVi = 'http://34.125.88.216/app/api/caseta/visitas.php?action=';
     }
     //Cargando info de la pagina
     readRows(api_visitaVi);
@@ -42,7 +42,7 @@ function fillTable(dataset) {
                 <th scope="row">
                     <div class="row paddingTh">
                         <div class="col-12">
-                            <img src="http://34.125.57.125/resources/img/dashboard_img/residentes_fotos/${row.foto}" alt="#"
+                            <img src="http://34.125.88.216/resources/img/dashboard_img/residentes_fotos/${row.foto}" alt="#"
                                 class="rounded-circle fit-images" width="30px" height="30px">
                         </div>
                     </div>

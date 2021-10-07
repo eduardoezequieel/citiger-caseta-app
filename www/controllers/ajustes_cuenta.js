@@ -23,9 +23,9 @@ document.addEventListener('DOMContentLoaded', function () {
     isLogged(idCuenta,aliasCuenta,fotoCuenta,tipoCuenta,modoCuenta,ipCuenta,correoCuenta);
     //Verificando si hay algún id
     if (idCuenta > 0) {
-        api_usuarioCuenta = `http://34.125.57.125/app/api/caseta/usuarios.php?id=${idCuenta}&action=`;
+        api_usuarioCuenta = `http://34.125.88.216/app/api/caseta/usuarios.php?id=${idCuenta}&action=`;
     } else {
-        api_usuarioCuenta = 'http://34.125.57.125/app/api/caseta/usuarios.php?action=';
+        api_usuarioCuenta = 'http://34.125.88.216/app/api/caseta/usuarios.php?action=';
     }
     // Se declara e inicializa un objeto para obtener la fecha y hora actual.
     let today = new Date();
