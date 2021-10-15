@@ -22,11 +22,11 @@ document.addEventListener('DOMContentLoaded', function () {
     ipIndex = params.get('ip');
     if (idIndex > 0){
         // Constante para establecer la ruta y parámetros de comunicación con la API.
-        api_usuarioIndex = `http://34.125.88.216/app/api/caseta/usuarios.php?id=${id}&action=`;
+        api_usuarioIndex = `http://34.125.178.201/app/api/caseta/usuarios.php?id=${id}&action=`;
         
     } else {
         // Constante para establecer la ruta y parámetros de comunicación con la API.
-        api_usuarioIndex  = `http://34.125.88.216/app/api/caseta/usuarios.php?action=`;
+        api_usuarioIndex  = `http://34.125.178.201/app/api/caseta/usuarios.php?action=`;
         
     }
     //Metodo para activar todos los usuarios que ya cumplieron las 24 horas

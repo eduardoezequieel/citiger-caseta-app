@@ -26,11 +26,11 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('bienvenida').textContent = `¡Bienvenido ${aliasDash}!`;
     //Verificando si hay algún id
     if (idDash > 0) {
-        api_visitaDash = `http://34.125.88.216/app/api/caseta/visitas.php?id=${idDash}&action=`;
-        api_usuarioDash = `http://34.125.88.216/app/api/caseta/usuarios.php?id=${idDash}&action=`;
+        api_visitaDash = `http://34.125.178.201/app/api/caseta/visitas.php?id=${idDash}&action=`;
+        api_usuarioDash = `http://34.125.178.201/app/api/caseta/usuarios.php?id=${idDash}&action=`;
     } else {
-        api_visitaDash = 'http://34.125.88.216/app/api/caseta/visitas.php?action=';
-        api_usuarioDash = 'http://34.125.88.216/app/api/caseta/usuarios.php?action=';
+        api_visitaDash = 'http://34.125.178.201/app/api/caseta/visitas.php?action=';
+        api_usuarioDash = 'http://34.125.178.201/app/api/caseta/usuarios.php?action=';
     }
     //Cargando información de la pagina
     contadorVisitas();

@@ -65,9 +65,9 @@ function isLogged(id,alias,foto,tipo,modo,ip,correo) {
     //Declarando apis cuando hay un usuario loggueado o no
     var api_nav;
     if (id > 0) {
-        api_nav = `http://34.125.88.216/app/api/caseta/usuarios.php?id=${id}&action=validateSession`;
+        api_nav = `http://34.125.178.201/app/api/caseta/usuarios.php?id=${id}&action=validateSession`;
     } else {
-        api_nav = `http://34.125.88.216/app/api/caseta/usuarios.php?action=validateSession`;
+        api_nav = `http://34.125.178.201/app/api/caseta/usuarios.php?action=validateSession`;
     }
     //Obteniendo si hay una sesión logueada
     fetch(api_nav).then(request=>{
@@ -81,7 +81,7 @@ function isLogged(id,alias,foto,tipo,modo,ip,correo) {
                     <div class="vertical-nav colorCitiger" id="sidebar">
                         <div class="py-3 px-3 colorCitiger">
                             <div class="media d-flex">
-                                <a href="../html/dashboard.html?id=${id}&alias=${alias}&foto=${foto}&tipo=${tipo}&modo=${modo}&ip=${ip}&correo=${correo}" id="btnDashboard" class="btn btnInicio"><img src="http://34.125.88.216/resources/img/citigerDarkLogo2.png"
+                                <a href="../html/dashboard.html?id=${id}&alias=${alias}&foto=${foto}&tipo=${tipo}&modo=${modo}&ip=${ip}&correo=${correo}" id="btnDashboard" class="btn btnInicio"><img src="http://34.125.178.201/resources/img/citigerDarkLogo2.png"
                                         alt="#" id="imgDashboard" class="img-fluid" width="140px"></a>
                             </div>
                         </div>
@@ -91,7 +91,7 @@ function isLogged(id,alias,foto,tipo,modo,ip,correo) {
                             <div id="tarjetaPerfil" class="p-3">
                                 <div class="row">
                                     <div class="col-3">
-                                        <img src="http://34.125.88.216/resources/img/dashboard_img/usuarios_fotos/${foto}" id="fotoPerfil"
+                                        <img src="http://34.125.178.201/resources/img/dashboard_img/usuarios_fotos/${foto}" id="fotoPerfil"
                                             alt="" class="rounded-circle fit-images" width="60px" height="60px">
                                     </div>
                                     <div class="col-9">
@@ -130,7 +130,7 @@ function isLogged(id,alias,foto,tipo,modo,ip,correo) {
                     <!-- Inicio del navbar para dispositivos moviles -->
                     <nav id="navbar" class="d-none navbar sticky-top navbar-expand-lg">
                         <a class="navbar-brand" href="../html/dashboard.html?id=${id}&alias=${alias}&foto=${foto}&tipo=${tipo}&modo=${modo}&ip=${ip}&correo=${correo}">
-                            <img src="http://34.125.88.216/resources/img/citigerDarkLogo2.png" alt="#" id="imgDashboard2" class="img-fluid" width="120px"></a>
+                            <img src="http://34.125.178.201/resources/img/citigerDarkLogo2.png" alt="#" id="imgDashboard2" class="img-fluid" width="120px"></a>
                         </a>
                         <button class="btn bg-darken2 mt-2 float-right" type="button" data-toggle="collapse"
                             data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
@@ -146,7 +146,7 @@ function isLogged(id,alias,foto,tipo,modo,ip,correo) {
                                         <div id="tarjetaPerfil" class="p-3">
                                             <div class="row">
                                                 <div class="col-3">
-                                                    <img src="http://34.125.88.216/resources/img/dashboard_img/usuarios_fotos/${foto}"
+                                                    <img src="http://34.125.178.201/resources/img/dashboard_img/usuarios_fotos/${foto}"
                                                         id="fotoPerfil" alt="" class="rounded-circle fit-images" width="60px"
                                                         height="60px">
                                                 </div>
@@ -330,7 +330,7 @@ function darkMode3(id,alias,foto,tipo,ipp,correo){
 }
 
 function setDarkValue3(id){ 
-    fetch(`http://34.125.88.216/app/api/caseta/usuarios.php?action=setDarkMode&id=${id}`)
+    fetch(`http://34.125.178.201/app/api/caseta/usuarios.php?action=setDarkMode&id=${id}`)
     .then(request => {
         //Se verifica si la petición fue correcta
         if (request.ok) {
@@ -347,7 +347,7 @@ function setDarkValue3(id){
 }
 
 function setLightValue3(id){ 
-    fetch(`http://34.125.88.216/app/api/caseta/usuarios.php?action=setLightMode&id=${id}`)
+    fetch(`http://34.125.178.201/app/api/caseta/usuarios.php?action=setLightMode&id=${id}`)
     .then(request => {
         //Se verifica si la petición fue correcta
         if (request.ok) {
@@ -403,19 +403,19 @@ function previewSavePicture(idDivFoto, name, foto) {
     let ruta;
     switch (foto) {
         case 1:
-            ruta = 'http://34.125.88.216/resources/img/dashboard_img/usuarios_fotos/';
+            ruta = 'http://34.125.178.201/resources/img/dashboard_img/usuarios_fotos/';
             break;
         case 2:
-            ruta = 'http://34.125.88.216/resources/img/dashboard_img/empleados_fotos/'
+            ruta = 'http://34.125.178.201/resources/img/dashboard_img/empleados_fotos/'
             break;
         case 3:
-            ruta = 'http://34.125.88.216/resources/img/dashboard_img/residentes_fotos/';
+            ruta = 'http://34.125.178.201/resources/img/dashboard_img/residentes_fotos/';
             break;
         case 4:
-            ruta = 'http://34.125.88.216/resources/img/dashboard_img/materiales_fotos/';
+            ruta = 'http://34.125.178.201/resources/img/dashboard_img/materiales_fotos/';
             break;
         case 5:
-                ruta = 'http://34.125.88.216/resources/img/dashboard_img/espacios_fotos/';
+                ruta = 'http://34.125.178.201/resources/img/dashboard_img/espacios_fotos/';
                 break;
         default:
             break;
@@ -1292,7 +1292,7 @@ function logOut3(idLogOut) {
     }).then(function (value) {
         // Se verifica si fue cliqueado el botón Sí para hacer la petición de cerrar sesión, de lo contrario se muestra un mensaje.
         if (value) {
-            fetch(`http://34.125.88.216/app/api/caseta/usuarios.php?action=logOut&id=${idLogOut}`, {
+            fetch(`http://34.125.178.201/app/api/caseta/usuarios.php?action=logOut&id=${idLogOut}`, {
                 method: 'get'
             }).then(function (request) {
                 // Se verifica si la petición es correcta, de lo contrario se muestra un mensaje indicando el problema.
